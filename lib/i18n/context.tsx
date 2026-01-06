@@ -15,6 +15,7 @@ const I18nContext = createContext<I18nContextType | undefined>(undefined)
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
   const [language, setLanguageState] = useState<Language>("pl")
+  const [isMounted, setIsMounted] = useState(false)
 
   // Load language from localStorage on mount
   useEffect(() => {
@@ -23,6 +24,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
     if (savedLanguage && validLanguages.includes(savedLanguage)) {
       setLanguageState(savedLanguage)
     }
+    setIsMounted(true)
   }, [])
 
   const setLanguage = (lang: Language) => {
@@ -43,6 +45,10 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
 
   const t = translations[language]
 
+  if (!isMounted) {
+    return null
+  }
+
   return (
     <I18nContext.Provider value={{ language, setLanguage, t }}>
       {children}
@@ -57,4 +63,3 @@ export function useI18n() {
   }
   return context
 }
-
