@@ -9,9 +9,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Loader2, DollarSign, Search } from "lucide-react"
 import { toast } from "sonner"
+import { useI18n } from "@/lib/i18n/context"
 
 export function DCFLeveredComponent() {
   const { isPremium, loading: subscriptionLoading } = useSubscription()
+  const { t } = useI18n()
 
   const [symbol, setSymbol] = useState("AAPL")
   const [loading, setLoading] = useState(false)
@@ -82,10 +84,10 @@ export function DCFLeveredComponent() {
         <CardContent className="space-y-6">
           <div className="flex gap-4">
             <div className="flex-1">
-              <Label htmlFor="symbol">Symbol spółki</Label>
+              <Label htmlFor="symbol">{t.economicCalendarPage?.dcfSymbolLabel || "Symbol spółki"}</Label>
               <Input
                 id="symbol"
-                placeholder="np. AAPL, MSFT, GOOGL"
+                placeholder={t.economicCalendarPage?.dcfPlaceholder || "np. AAPL, MSFT, GOOGL"}
                 value={symbol}
                 onChange={(e) => setSymbol(e.target.value.toUpperCase())}
                 onKeyDown={(e) => e.key === "Enter" && fetchDCF()}
@@ -96,12 +98,12 @@ export function DCFLeveredComponent() {
                 {loading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Pobieranie...
+                    {t.economicCalendarPage?.dcfFetching || "Pobieranie..."}
                   </>
                 ) : (
                   <>
                     <Search className="mr-2 h-4 w-4" />
-                    Analizuj
+                    {t.economicCalendarPage?.dcfAnalyze || "Analizuj"}
                   </>
                 )}
               </Button>

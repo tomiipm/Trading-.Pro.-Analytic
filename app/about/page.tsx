@@ -42,7 +42,7 @@ export default function AboutPage() {
               <div className="mt-6 rounded-lg overflow-hidden bg-gradient-to-br from-cyan-500/10 to-blue-500/10 p-8 border border-cyan-500/20">
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                   <Image 
-                    src="/images/mobile-app/2026, 20_02_55.png" 
+                    src={encodeURI("/images/mobile-app/2026, 20_02_55.png")} 
                     alt="Trading Pro Analytic Platform - Zaawansowana platforma analityczna z AI" 
                     fill
                     className="object-contain rounded-lg"

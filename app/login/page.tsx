@@ -70,11 +70,11 @@ function LoginContent() {
     e.preventDefault()
     setError(null)
 
-    // reCAPTCHA temporarily disabled
-    // if (!recaptchaToken) {
-    //   setError("Please complete the reCAPTCHA verification")
-    //   return
-    // }
+    // reCAPTCHA verification required for production
+    if (!recaptchaToken) {
+      setError(t.loginPage.recaptchaRequired || "Please complete the reCAPTCHA verification")
+      return
+    }
 
     setLoading(true)
 
@@ -87,14 +87,27 @@ function LoginContent() {
         body: JSON.stringify({ 
           email, 
           password,
-          // recaptchaToken: recaptchaToken || undefined,
+          recaptchaToken: recaptchaToken,
         }),
       })
 
-      const data = await response.json()
-
       if (!response.ok) {
-        setError(data.error || "Login failed")
+        let errorMessage = t.loginPage.error || "Login failed. Please try again."
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch (parseError) {
+          // If response is not JSON, use status text or default message
+          if (response.status === 401) {
+            errorMessage = t.loginPage.invalidCredentials || "Invalid email or password. Please try again."
+          } else if (response.status === 429) {
+            errorMessage = t.loginPage.tooManyAttempts || "Too many login attempts. Please try again later."
+          } else {
+            errorMessage = response.statusText || errorMessage
+          }
+        }
+        setError(errorMessage)
+        toast.error(errorMessage)
         // Reset reCAPTCHA on error
         if (recaptchaRef.current) {
           recaptchaRef.current.reset()
@@ -103,12 +116,31 @@ function LoginContent() {
         return
       }
 
-      toast.success(t.auth.loggedIn)
+      const data = await response.json()
+      
+      // Verify we got a valid response
+      if (!data.success && !data.user) {
+        setError(t.loginPage.error || "Login failed. Please try again.")
+        toast.error(t.loginPage.error || "Login failed. Please try again.")
+        // Reset reCAPTCHA on error
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset()
+        }
+        setRecaptchaToken(null)
+        return
+      }
+      
+      toast.success(t.auth.loggedIn || "Logged in successfully")
       // Redirect to profile/dashboard after login (best practice)
       router.push(redirectTo === '/' ? '/profile' : redirectTo)
       router.refresh()
     } catch (err) {
-      setError("An error occurred. Please try again.")
+      console.error("Login error:", err)
+      const errorMessage = err instanceof Error 
+        ? err.message 
+        : (t.loginPage.error || "An error occurred. Please try again.")
+      setError(errorMessage)
+      toast.error(errorMessage)
       // Reset reCAPTCHA on error
       if (recaptchaRef.current) {
         recaptchaRef.current.reset()
@@ -175,23 +207,25 @@ function LoginContent() {
               </div>
             </div>
 
-            {/* reCAPTCHA temporarily disabled */}
-            {/* <div className="space-y-2">
-              <Label className="text-sm font-medium">Weryfikacja bezpieczeństwa</Label>
-              <div className="flex justify-center py-2">
-                <ReCaptcha
-                  ref={recaptchaRef}
-                  siteKey={recaptchaSiteKey}
-                  onVerify={handleRecaptchaVerify}
-                  onExpire={handleRecaptchaExpire}
-                />
+            {/* reCAPTCHA verification */}
+            {recaptchaSiteKey && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">{t.loginPage.securityVerification || "Security Verification"}</Label>
+                <div className="flex justify-center py-2">
+                  <ReCaptcha
+                    ref={recaptchaRef}
+                    siteKey={recaptchaSiteKey}
+                    onVerify={handleRecaptchaVerify}
+                    onExpire={handleRecaptchaExpire}
+                  />
+                </div>
+                {!recaptchaToken && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    {t.loginPage.recaptchaInstructions || "Please complete the reCAPTCHA verification to continue"}
+                  </p>
+                )}
               </div>
-              {!recaptchaToken && (
-                <p className="text-xs text-muted-foreground text-center">
-                  Zaznacz pole "Nie jestem robotem" aby kontynuować
-                </p>
-              )}
-            </div> */}
+            )}
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (

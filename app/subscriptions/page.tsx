@@ -10,12 +10,13 @@ import { Crown, Sparkles, Check, Loader2 } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
 import { toast } from "sonner"
 import { useI18n } from "@/lib/i18n/context"
+import { getLocaleFromLanguage } from "@/lib/i18n/utils"
 
 function SubscriptionsContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, subscription, loading: authLoading, refreshUserData } = useAuth()
-  const { t } = useI18n()
+  const { t, language } = useI18n()
   const [activating, setActivating] = useState<string | null>(null)
 
   // Obsługa powrotu z PayPal
@@ -144,9 +145,9 @@ function SubscriptionsContent() {
     <div className="min-h-screen bg-background py-12 px-4">
       <div className="container max-w-5xl mx-auto">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">{t.subscriptionsPage.title || t.premiumSection.title}</h1>
+          <h1 className="text-4xl font-bold mb-4">{t.subscriptionsPage?.title || t.premiumSection?.title || "Subscriptions"}</h1>
           <p className="text-muted-foreground text-lg">
-            {t.premiumSection.description}
+            {t.premiumSection?.description || ""}
           </p>
         </div>
 
@@ -155,14 +156,14 @@ function SubscriptionsContent() {
             <AlertDescription>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-semibold">{t.subscriptions.active} {t.subscriptions.title || "Subscription"}</p>
+                  <p className="font-semibold">{t.subscriptions?.active || "Active"} {t.subscriptions?.title || "Subscription"}</p>
                   <p className="text-sm text-muted-foreground">
                     {subscription.subscription_type === "premium" && t.subscriptions.premium}
                     {subscription.subscription_type === "trial" && t.subscriptions.trial}
                     {subscription.subscription_type === "free" && (t.subscriptions.trial || "Free")}
                     {subscription.subscription_type === "one_day" && t.premiumSection.oneDay}
                     {" - "}
-                    {t.profile.expires || "Expires"}: {new Date(subscription.expires_at).toLocaleDateString(t.language === "pl" ? "pl-PL" : t.language === "de" ? "de-DE" : t.language === "fr" ? "fr-FR" : t.language === "es" ? "es-ES" : t.language === "it" ? "it-IT" : t.language === "pt" ? "pt-PT" : t.language === "ru" ? "ru-RU" : t.language === "zh-CN" ? "zh-CN" : t.language === "ja" ? "ja-JP" : "en-US")}
+                    {"Expires"}: {new Date(subscription.expires_at).toLocaleDateString(getLocaleFromLanguage(language))}
                   </p>
                 </div>
               </div>
@@ -332,7 +333,7 @@ function SubscriptionsContent() {
               <CardHeader>
                 <CardTitle className="text-xl flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-blue-500" />
-                  {t.subscriptions.premium} {t.common.available || "Available"} {t.common.after || "After"} {t.subscriptions.trial} {t.common.expires || "Expires"}
+                  {t.subscriptions.premium} {"Available"} {"After"} {t.subscriptions.trial} {"Expires"}
                 </CardTitle>
                 <CardDescription>
                   {t.premiumSection.description || "After trial period ends, you can activate Premium subscription"}

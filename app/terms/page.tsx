@@ -1,12 +1,14 @@
+"use client"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { FileText } from "lucide-react"
-
-export const metadata = {
-  title: "Regulamin - Trading Pro Analytic",
-  description: "Regulamin korzystania z usług Trading Pro Analytic",
-}
+import { useI18n } from "@/lib/i18n/context"
+import { getLocaleFromLanguage } from "@/lib/i18n/utils"
 
 export default function TermsPage() {
+  const { t, language } = useI18n()
+  const locale = getLocaleFromLanguage(language)
+  
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto py-12 px-4 max-w-4xl">
@@ -17,7 +19,7 @@ export default function TermsPage() {
               <CardTitle className="text-3xl">Regulamin</CardTitle>
             </div>
             <p className="text-muted-foreground mt-2">
-              Ostatnia aktualizacja: {new Date().toLocaleDateString("pl-PL", { year: "numeric", month: "long", day: "numeric" })}
+              Ostatnia aktualizacja: {new Date().toLocaleDateString(locale, { year: "numeric", month: "long", day: "numeric" })}
             </p>
           </CardHeader>
           <CardContent className="prose prose-slate dark:prose-invert max-w-none space-y-8">

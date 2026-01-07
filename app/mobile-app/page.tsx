@@ -106,10 +106,16 @@ export default function MobileAppPage() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 flex-shrink-0">
-                  <img
-                    src="/images/mobile-app/sty 2026, 19_43_08.png"
+                  <Image
+                    src={encodeURI("/images/mobile-app/sty 2026, 19_43_08.png")}
                     alt="STOP GUESSING. START TRADING - AI-driven market logic"
-                    className="w-full h-full object-contain"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                    }}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
@@ -129,10 +135,16 @@ export default function MobileAppPage() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 flex-shrink-0">
-                  <img
+                  <Image
                     src="/images/mobile-app/Image 26.png"
                     alt="SECONDS MATTER - Instant push notifications"
-                    className="w-full h-full object-contain"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                    }}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
@@ -149,10 +161,16 @@ export default function MobileAppPage() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-green-500/10 to-emerald-500/10 flex-shrink-0">
-                  <img
-                    src="/images/mobile-app/, 18_08_26.png"
+                  <Image
+                    src={encodeURI("/images/mobile-app/, 18_08_26.png")}
                     alt="NO CHAOS. ONLY LEVELS - Entry, Stop Loss, Take Profits"
-                    className="w-full h-full object-contain"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                    }}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
@@ -169,10 +187,16 @@ export default function MobileAppPage() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex-shrink-0">
-                  <img
+                  <Image
                     src="/images/mobile-app/8_10_30.png"
                     alt="PROBABILITY OVER EMOTION - Signals ranked by win probability"
-                    className="w-full h-full object-contain"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                    }}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
@@ -189,10 +213,16 @@ export default function MobileAppPage() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 flex-shrink-0">
-                  <img
+                  <Image
                     src="/images/mobile-app/_23_47.png"
                     alt="REAL TRADES. REAL RESULTS - Track hits, losses & win rates"
-                    className="w-full h-full object-contain"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                    }}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
@@ -212,10 +242,16 @@ export default function MobileAppPage() {
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 border-2 border-yellow-500/30 bg-gradient-to-br from-yellow-500/20 to-amber-500/20 flex-shrink-0">
-                  <img
-                    src="/images/mobile-app/, 18_08_26.png"
+                  <Image
+                    src={encodeURI("/images/mobile-app/, 18_08_26.png")}
                     alt="SEE WHAT OTHERS CAN'T - Unlock premium signal details"
-                    className="w-full h-full object-contain"
+                    fill
+                    className="object-contain"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.style.display = 'none'
+                    }}
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">

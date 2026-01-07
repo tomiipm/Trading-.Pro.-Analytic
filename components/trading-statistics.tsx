@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Target, AlertCircle, BarChart3, RefreshCw, Activity } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useI18n } from "@/lib/i18n/context"
 
 interface Signal {
   id: string
@@ -34,6 +35,7 @@ interface Statistics {
 type TimeRange = "1d" | "7d" | "30d"
 
 export function TradingStatistics() {
+  const { t } = useI18n()
   const [signals, setSignals] = useState<Signal[]>([])
   const [timeRange, setTimeRange] = useState<TimeRange>("7d")
   const [loading, setLoading] = useState(true)
@@ -127,7 +129,7 @@ export function TradingStatistics() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-cyan-400" />
-            Trading Statistics
+            {t.tradingStatistics?.title || "Trading Statistics"}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -145,7 +147,7 @@ export function TradingStatistics() {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <BarChart3 className="h-5 w-5 text-cyan-400" />
-            Trading Statistics
+            {t.tradingStatistics?.title || "Trading Statistics"}
           </CardTitle>
           <Button onClick={() => fetchSignals(true)} size="sm" variant="ghost" disabled={refreshing}>
             <RefreshCw className={cn("h-4 w-4", refreshing && "animate-spin")} />
@@ -164,7 +166,7 @@ export function TradingStatistics() {
               timeRange !== "1d" && "border-cyan-500/40 hover:border-cyan-400",
             )}
           >
-            1 Day
+            {t.tradingStatistics?.oneDay || "1 Day"}
           </Button>
           <Button
             onClick={() => setTimeRange("7d")}
@@ -175,7 +177,7 @@ export function TradingStatistics() {
               timeRange !== "7d" && "border-cyan-500/40 hover:border-cyan-400",
             )}
           >
-            7 Days
+            {t.tradingStatistics?.sevenDays || "7 Days"}
           </Button>
           <Button
             onClick={() => setTimeRange("30d")}
@@ -186,19 +188,19 @@ export function TradingStatistics() {
               timeRange !== "30d" && "border-cyan-500/40 hover:border-cyan-400",
             )}
           >
-            30 Days
+            {t.tradingStatistics?.thirtyDays || "30 Days"}
           </Button>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          <StatCard label="Total Signals" value={stats.totalSignals} icon={BarChart3} color="cyan" />
-          <StatCard label="Active Signals" value={stats.activeSignals} icon={Activity} color="blue" />
-          <StatCard label="TP1 Hits" value={stats.tp1Hits} icon={Target} color="green" />
-          <StatCard label="TP2 Hits" value={stats.tp2Hits} icon={Target} color="emerald" />
-          <StatCard label="TP3 Hits" value={stats.tp3Hits} icon={Target} color="lime" />
-          <StatCard label="Stop Loss" value={stats.slHits} icon={AlertCircle} color="red" />
+          <StatCard label={t.tradingStatistics?.totalSignals || "Total Signals"} value={stats.totalSignals} icon={BarChart3} color="cyan" />
+          <StatCard label={t.tradingStatistics?.activeSignals || "Active Signals"} value={stats.activeSignals} icon={Activity} color="blue" />
+          <StatCard label={t.tradingStatistics?.tp1Hits || "TP1 Hits"} value={stats.tp1Hits} icon={Target} color="green" />
+          <StatCard label={t.tradingStatistics?.tp2Hits || "TP2 Hits"} value={stats.tp2Hits} icon={Target} color="emerald" />
+          <StatCard label={t.tradingStatistics?.tp3Hits || "TP3 Hits"} value={stats.tp3Hits} icon={Target} color="lime" />
+          <StatCard label={t.tradingStatistics?.stopLoss || "Stop Loss"} value={stats.slHits} icon={AlertCircle} color="red" />
           <StatCard
-            label="Win Rate"
+            label={t.tradingStatistics?.winRate || "Win Rate"}
             value={`${stats.winRate.toFixed(1)}%`}
             icon={BarChart3}
             color={stats.winRate >= 70 ? "green" : stats.winRate >= 50 ? "yellow" : "red"}

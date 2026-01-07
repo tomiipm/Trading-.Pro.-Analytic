@@ -177,9 +177,14 @@ export function useAuth() {
   }
 
   const hasActiveSubscription = () => {
-    // User must be logged in AND have active subscription
+    // User must be logged in AND have active subscription (but NOT 'free')
+    // 'free' subscription is just a placeholder, doesn't give access to signal details
     if (!user) return false
-    return subscription !== null && subscription.status === "active" && new Date(subscription.expires_at) > new Date()
+    if (!subscription) return false
+    if (subscription.status !== "active") return false
+    if (new Date(subscription.expires_at) <= new Date()) return false
+    // Exclude 'free' subscription - it doesn't give access
+    return subscription.subscription_type !== "free"
   }
 
   return {

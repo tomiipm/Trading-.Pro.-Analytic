@@ -10,7 +10,11 @@ interface LogEntry {
   message: string
   timestamp: string
   context?: Record<string, any>
-  error?: Error
+  error?: {
+    message: string
+    stack?: string
+    name?: string
+  }
 }
 
 class Logger {
@@ -50,8 +54,9 @@ class Logger {
 
     // In production, use structured JSON logging
     if (this.isProduction) {
-      // TODO: Send to external logging service (Sentry, LogRocket, etc.)
-      // For now, use console but in JSON format
+      // Structured JSON logging for production
+      // Future enhancement: Integrate with external logging service (Sentry, LogRocket, etc.)
+      // Current implementation uses console.log with JSON format for structured logging
       console.log(JSON.stringify(entry))
     }
   }

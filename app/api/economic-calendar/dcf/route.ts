@@ -2,8 +2,13 @@ import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { rateLimiters } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
+import { checkPremiumSubscription } from "@/lib/subscription-check"
+import { z } from "zod"
 
 const FMP_API_URL = process.env.FMP_API_URL || "https://financialmodelingprep.com/api/v3"
+
+// Validation schema for symbol parameter
+const symbolSchema = z.string().min(1).max(10).regex(/^[A-Z]+$/, "Invalid symbol format. Must be uppercase letters only.")
 
 export async function GET(request: Request) {
   // Rate limiting
@@ -53,16 +58,9 @@ export async function GET(request: Request) {
     }
 
     // Check subscription
-    const { data: subscription } = await supabase
-      .from("user_subscriptions")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("status", "active")
-      .gt("expires_at", new Date().toISOString())
-      .eq("subscription_type", "premium")
-      .single()
+    const hasPremium = await checkPremiumSubscription(supabase, user.id)
 
-    if (!subscription) {
+    if (!hasPremium) {
       return NextResponse.json(
         { error: "Premium subscription required" },
         { status: 403 }
@@ -70,7 +68,22 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const symbol = searchParams.get("symbol") || "AAPL"
+    const symbolParam = searchParams.get("symbol") || "AAPL"
+    
+    // Validate symbol parameter
+    const symbolValidation = symbolSchema.safeParse(symbolParam)
+    if (!symbolValidation.success) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: "Invalid symbol parameter. Must be 1-10 uppercase letters.",
+          data: null,
+        },
+        { status: 400 }
+      )
+    }
+    
+    const symbol = symbolValidation.data
 
     // FMP API endpoint for DCF
     const url = `${FMP_API_URL}/dcf/${symbol}?apikey=${FMP_API_KEY}`

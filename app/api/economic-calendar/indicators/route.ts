@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { rateLimiters } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
+import { checkPremiumSubscription } from "@/lib/subscription-check"
 import { z } from "zod"
 
 const FMP_API_URL = process.env.FMP_API_URL || "https://financialmodelingprep.com/api/v3"
@@ -10,6 +11,9 @@ const countryQuerySchema = z.string().length(2)
 const indicatorQuerySchema = z.string()
 
 export async function GET(request: Request) {
+  let country = "US"
+  let indicator = ""
+  
   // Rate limiting
   const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
   const rateLimitResult = await rateLimiters.premium(ip)
@@ -57,16 +61,9 @@ export async function GET(request: Request) {
     }
 
     // Check subscription
-    const { data: subscription } = await supabase
-      .from("user_subscriptions")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("status", "active")
-      .gt("expires_at", new Date().toISOString())
-      .eq("subscription_type", "premium")
-      .single()
+    const hasPremium = await checkPremiumSubscription(supabase, user.id)
 
-    if (!subscription) {
+    if (!hasPremium) {
       return NextResponse.json(
         { error: "Premium subscription required" },
         { status: 403 }
@@ -87,8 +84,8 @@ export async function GET(request: Request) {
       )
     }
     
-    const country = countryValidation.data
-    const indicator = indicatorParam // Indicator is optional, no strict validation needed
+    country = countryValidation.data
+    indicator = indicatorParam // Indicator is optional, no strict validation needed
 
     // FMP API endpoint for economic indicators
     let url = `${FMP_API_URL}/economic?country=${country}&apikey=${FMP_API_KEY}`

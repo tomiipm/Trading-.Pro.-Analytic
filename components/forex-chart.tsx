@@ -215,8 +215,8 @@ export default function ForexChart({ symbol, timeframe = "1H" }: ForexChartProps
                   />
                   <Tooltip
                     labelFormatter={(value) => new Date(value).toLocaleString()}
-                    formatter={(value: number) => [
-                      symbol.includes("JPY") ? value.toFixed(3) : value.toFixed(5),
+                    formatter={(value: number | undefined) => [
+                      value ? (symbol.includes("JPY") ? value.toFixed(3) : value.toFixed(5)) : "",
                       "Price",
                     ]}
                   />

@@ -10,7 +10,7 @@ import Link from "next/link"
 
 export function PremiumSection() {
   const { user, subscription, isPremium, isTrial, loading } = useAuth()
-  const { t } = useI18n()
+  const { t, language } = useI18n()
 
   // Jeśli ładowanie trwa, nie pokazuj niczego (zapobiega blokowaniu strony)
   if (loading) {
@@ -98,7 +98,7 @@ export function PremiumSection() {
               {hasActiveTrial && (
                 <div className="p-3 rounded-lg bg-blue-500/10 border border-blue-500/30">
                   <p className="text-sm font-semibold text-blue-400">
-                    {t.premiumSection.trialActiveUntil} {subscription && new Date(subscription.expires_at).toLocaleDateString(t.language === "pl" ? "pl-PL" : t.language === "de" ? "de-DE" : t.language === "fr" ? "fr-FR" : t.language === "es" ? "es-ES" : t.language === "it" ? "it-IT" : t.language === "pt" ? "pt-PT" : t.language === "ru" ? "ru-RU" : t.language === "zh-CN" ? "zh-CN" : t.language === "ja" ? "ja-JP" : "en-US")}
+                    {t.premiumSection.trialActiveUntil} {subscription && new Date(subscription.expires_at).toLocaleDateString(language === "pl" ? "pl-PL" : language === "de" ? "de-DE" : language === "fr" ? "fr-FR" : language === "es" ? "es-ES" : language === "it" ? "it-IT" : language === "pt" ? "pt-PT" : language === "ru" ? "ru-RU" : language === "zh-CN" ? "zh-CN" : language === "ja" ? "ja-JP" : "en-US")}
                   </p>
                 </div>
               )}
@@ -163,7 +163,7 @@ export function PremiumSection() {
               {hasActivePremium ? (
                 <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
                   <p className="text-sm font-semibold text-yellow-400">
-                    {t.premiumSection.premiumActiveUntil} {subscription && new Date(subscription.expires_at).toLocaleDateString(t.language === "pl" ? "pl-PL" : t.language === "de" ? "de-DE" : t.language === "fr" ? "fr-FR" : t.language === "es" ? "es-ES" : t.language === "it" ? "it-IT" : t.language === "pt" ? "pt-PT" : t.language === "ru" ? "ru-RU" : t.language === "zh-CN" ? "zh-CN" : t.language === "ja" ? "ja-JP" : "en-US")}
+                    {t.premiumSection.premiumActiveUntil} {subscription && new Date(subscription.expires_at).toLocaleDateString(language === "pl" ? "pl-PL" : language === "de" ? "de-DE" : language === "fr" ? "fr-FR" : language === "es" ? "es-ES" : language === "it" ? "it-IT" : language === "pt" ? "pt-PT" : language === "ru" ? "ru-RU" : language === "zh-CN" ? "zh-CN" : language === "ja" ? "ja-JP" : "en-US")}
                   </p>
                 </div>
               ) : (

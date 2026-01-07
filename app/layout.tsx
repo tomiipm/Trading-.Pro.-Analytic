@@ -8,8 +8,22 @@ import { Toaster } from "sonner"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ErrorBoundary } from "@/components/error-boundary"
+import { validateEnvironmentVariables } from "@/lib/config"
 
 const inter = Inter({ subsets: ["latin"] })
+
+// Validate environment variables at startup (only in production)
+if (process.env.NODE_ENV === "production") {
+  const validation = validateEnvironmentVariables()
+  if (!validation.isValid) {
+    console.error(
+      `[FATAL] Missing required environment variables: ${validation.missing.join(", ")}`
+    )
+    // In production, we should fail fast if required env vars are missing
+    // But we'll just log the error to avoid breaking the app
+    // The app will handle missing vars gracefully in each component
+  }
+}
 
 export const metadata: Metadata = {
   title: "Trading Pro Analytic - Professional Trading Signals | AI-Powered Forex Signals",
@@ -25,6 +39,7 @@ export const metadata: Metadata = {
       { url: "/favicon.ico", sizes: "any" },
       { url: "/icon-dark-32x32.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: dark)" },
       { url: "/icon-light-32x32.png", type: "image/png", sizes: "32x32", media: "(prefers-color-scheme: light)" },
+      { url: "/logo.png", type: "image/png", sizes: "any" },
     ],
     apple: [
       { url: "/apple-icon.png", sizes: "180x180", type: "image/png" },

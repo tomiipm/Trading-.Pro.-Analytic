@@ -44,7 +44,7 @@ async function fetchWithRetry(url: string, retries = 3, timeout = 10000): Promis
   throw new Error("Max retries reached")
 }
 
-export async function GET(request: NextRequest, { params }: { params: { symbol: string; timeframe: string } }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ symbol: string; timeframe: string }> }) {
   try {
     // Rate limiting
     const ip = request.headers.get("x-forwarded-for") || request.headers.get("x-real-ip") || "unknown"
@@ -68,7 +68,7 @@ export async function GET(request: NextRequest, { params }: { params: { symbol: 
       )
     }
 
-    const { symbol, timeframe } = params
+    const { symbol, timeframe } = await context.params
 
     // Validate symbol and timeframe
     const symbolValidation = validateAndParse(symbolSchema, symbol)
@@ -190,13 +190,14 @@ export async function GET(request: NextRequest, { params }: { params: { symbol: 
       { status: 503 }
     )
   } catch (error) {
-    logger.error("Chart API error", error instanceof Error ? error : new Error(String(error)), { symbol: params.symbol, timeframe: params.timeframe })
+    const { symbol: errorSymbol, timeframe: errorTimeframe } = await context.params
+    logger.error("Chart API error", error instanceof Error ? error : new Error(String(error)), { symbol: errorSymbol, timeframe: errorTimeframe })
     return NextResponse.json(
       {
         error: "Failed to fetch chart data",
         message: error instanceof Error ? error.message : "Unknown error",
-        symbol: params.symbol,
-        timeframe: params.timeframe,
+        symbol: errorSymbol,
+        timeframe: errorTimeframe,
       },
       { status: 500 }
     )

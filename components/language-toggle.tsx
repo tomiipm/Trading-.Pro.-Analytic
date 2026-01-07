@@ -14,14 +14,6 @@ import type { Language } from "@/lib/i18n/translations"
 const languages = [
   { code: "pl", name: "Polski", flag: "🇵🇱" },
   { code: "en", name: "English", flag: "🇬🇧" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
-  { code: "it", name: "Italiano", flag: "🇮🇹" },
-  { code: "pt", name: "Português", flag: "🇵🇹" },
-  { code: "ru", name: "Русский", flag: "🇷🇺" },
-  { code: "zh-CN", name: "中文", flag: "🇨🇳" },
-  { code: "ja", name: "日本語", flag: "🇯🇵" },
 ] as const
 
 export function LanguageToggle() {

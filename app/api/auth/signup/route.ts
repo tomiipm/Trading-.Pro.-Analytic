@@ -4,6 +4,7 @@ import { verifyRecaptcha } from "@/lib/recaptcha"
 import { rateLimiters } from "@/lib/rate-limit"
 import { validateAndParse, signupSchema } from "@/lib/validation"
 import { logger } from "@/lib/logger"
+import { getServerSiteUrl } from "@/lib/config"
 
 export async function POST(request: Request) {
   try {
@@ -41,17 +42,25 @@ export async function POST(request: Request) {
       )
     }
 
-    const { email, password, fullName } = validation.data
+    const { email, password, fullName, recaptchaToken } = validation.data
 
-    // reCAPTCHA temporarily disabled for testing
-    // const isValid = await verifyRecaptcha(recaptchaToken)
-    // if (!isValid) {
-    //   logger.warn("reCAPTCHA verification failed", { email })
-    //   return NextResponse.json(
-    //     { error: "reCAPTCHA verification failed. Please try again." },
-    //     { status: 400 }
-    //   )
-    // }
+    // reCAPTCHA verification required for production
+    if (!recaptchaToken) {
+      logger.warn("reCAPTCHA token missing", { email })
+      return NextResponse.json(
+        { error: "reCAPTCHA verification is required. Please try again." },
+        { status: 400 }
+      )
+    }
+
+    const isValid = await verifyRecaptcha(recaptchaToken)
+    if (!isValid) {
+      logger.warn("reCAPTCHA verification failed", { email })
+      return NextResponse.json(
+        { error: "reCAPTCHA verification failed. Please try again." },
+        { status: 400 }
+      )
+    }
 
     let supabase
     try {
@@ -63,6 +72,9 @@ export async function POST(request: Request) {
       )
     }
 
+    // Get site URL using helper function
+    const siteUrl = getServerSiteUrl(request)
+    
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -70,7 +82,7 @@ export async function POST(request: Request) {
         data: {
           full_name: fullName || "",
         },
-        emailRedirectTo: `${request.headers.get("origin") || "https://trading-pro-analytic.com"}/auth/callback`,
+        emailRedirectTo: `${siteUrl}/auth/callback`,
       },
     })
 

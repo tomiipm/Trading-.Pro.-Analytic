@@ -2,8 +2,13 @@ import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { rateLimiters } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
+import { checkPremiumSubscription } from "@/lib/subscription-check"
+import { z } from "zod"
 
 const FMP_API_URL = process.env.FMP_API_URL || "https://financialmodelingprep.com/api/v3"
+
+// Validation schema for date parameters (YYYY-MM-DD format)
+const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format. Must be YYYY-MM-DD.")
 
 export async function GET(request: Request) {
   // Rate limiting
@@ -53,16 +58,9 @@ export async function GET(request: Request) {
     }
 
     // Check subscription
-    const { data: subscription } = await supabase
-      .from("user_subscriptions")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("status", "active")
-      .gt("expires_at", new Date().toISOString())
-      .eq("subscription_type", "premium")
-      .single()
+    const hasPremium = await checkPremiumSubscription(supabase, user.id)
 
-    if (!subscription) {
+    if (!hasPremium) {
       return NextResponse.json(
         { error: "Premium subscription required" },
         { status: 403 }
@@ -70,8 +68,26 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const from = searchParams.get("from") || new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
-    const to = searchParams.get("to") || new Date().toISOString().split("T")[0]
+    const fromParam = searchParams.get("from") || new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString().split("T")[0]
+    const toParam = searchParams.get("to") || new Date().toISOString().split("T")[0]
+    
+    // Validate date parameters
+    const fromValidation = dateSchema.safeParse(fromParam)
+    const toValidation = dateSchema.safeParse(toParam)
+    
+    if (!fromValidation.success || !toValidation.success) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: "Invalid date parameters. Must be in YYYY-MM-DD format.",
+          data: [],
+        },
+        { status: 400 }
+      )
+    }
+    
+    const from = fromValidation.data
+    const to = toValidation.data
 
     // FMP API endpoint for COT data
     // Note: FMP may use different endpoint names, adjust if needed

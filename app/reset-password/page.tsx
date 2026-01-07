@@ -82,11 +82,11 @@ function ResetPasswordContent() {
       return
     }
 
-    // reCAPTCHA temporarily disabled
-    // if (!recaptchaToken) {
-    //   setError("Proszę ukończyć weryfikację reCAPTCHA")
-    //   return
-    // }
+    // reCAPTCHA verification required for production
+    if (!recaptchaToken) {
+      setError(t.resetPasswordPage.recaptchaRequired || "Please complete the reCAPTCHA verification")
+      return
+    }
 
     setLoading(true)
 
@@ -99,14 +99,27 @@ function ResetPasswordContent() {
         credentials: "include", // Important: include cookies for session
         body: JSON.stringify({ 
           password,
-          // recaptchaToken: recaptchaToken || undefined,
+          recaptchaToken: recaptchaToken,
         }),
       })
 
-      const data = await response.json()
-
       if (!response.ok) {
-        setError(data.error || "Nie udało się zresetować hasła")
+        let errorMessage = t.resetPasswordPage.error || "Failed to reset password"
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch (parseError) {
+          // If response is not JSON, use status text or default message
+          if (response.status === 401) {
+            errorMessage = t.resetPasswordPage.invalidToken || "Invalid or expired reset token. Please click the reset link from your email again."
+          } else if (response.status === 429) {
+            errorMessage = t.resetPasswordPage.tooManyAttempts || "Too many requests. Please try again later."
+          } else {
+            errorMessage = response.statusText || errorMessage
+          }
+        }
+        setError(errorMessage)
+        toast.error(errorMessage)
         // Reset reCAPTCHA on error
         if (recaptchaRef.current) {
           recaptchaRef.current.reset()
@@ -115,15 +128,31 @@ function ResetPasswordContent() {
         return
       }
 
+      const data = await response.json()
+      
+      // Verify we got a valid response
+      if (!data.success) {
+        setError(t.resetPasswordPage.error || "Failed to reset password. Please try again.")
+        toast.error(t.resetPasswordPage.error || "Failed to reset password. Please try again.")
+        // Reset reCAPTCHA on error
+        if (recaptchaRef.current) {
+          recaptchaRef.current.reset()
+        }
+        setRecaptchaToken(null)
+        return
+      }
+      
       setSuccess(true)
-      toast.success(t.loginPage.passwordResetSuccess)
+      toast.success(data.message || t.loginPage.passwordResetSuccess || "Password has been reset successfully.")
 
       // Redirect to login after 2 seconds - user will log in and be redirected to profile
       setTimeout(() => {
         router.push("/login?password_reset=true")
       }, 2000)
     } catch (err) {
-      setError("Wystąpił błąd. Spróbuj ponownie.")
+      console.error("Reset password error:", err)
+      const errorMessage = err instanceof Error ? err.message : (t.resetPasswordPage.error || "An error occurred. Please try again.")
+      setError(errorMessage)
       // Reset reCAPTCHA on error
       if (recaptchaRef.current) {
         recaptchaRef.current.reset()
@@ -263,23 +292,25 @@ function ResetPasswordContent() {
               </div>
             </div>
 
-            {/* reCAPTCHA temporarily disabled */}
-            {/* <div className="space-y-2">
-              <Label className="text-sm font-medium">Weryfikacja bezpieczeństwa</Label>
-              <div className="flex justify-center py-2">
-                <ReCaptcha
-                  ref={recaptchaRef}
-                  siteKey={recaptchaSiteKey}
-                  onVerify={handleRecaptchaVerify}
-                  onExpire={handleRecaptchaExpire}
-                />
+            {/* reCAPTCHA verification */}
+            {recaptchaSiteKey && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">{t.resetPasswordPage.securityVerification || "Security Verification"}</Label>
+                <div className="flex justify-center py-2">
+                  <ReCaptcha
+                    ref={recaptchaRef}
+                    siteKey={recaptchaSiteKey}
+                    onVerify={handleRecaptchaVerify}
+                    onExpire={handleRecaptchaExpire}
+                  />
+                </div>
+                {!recaptchaToken && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    {t.resetPasswordPage.recaptchaInstructions || "Please complete the reCAPTCHA verification to continue"}
+                  </p>
+                )}
               </div>
-              {!recaptchaToken && (
-                <p className="text-xs text-muted-foreground text-center">
-                  Zaznacz pole "Nie jestem robotem" aby kontynuować
-                </p>
-              )}
-            </div> */}
+            )}
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (

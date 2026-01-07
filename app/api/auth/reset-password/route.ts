@@ -7,7 +7,7 @@ import { z } from "zod"
 
 const resetPasswordSchema = z.object({
   password: z.string().min(6, "Password must be at least 6 characters"),
-  recaptchaToken: z.string().optional(), // Temporarily disabled
+  recaptchaToken: z.string().min(1, "reCAPTCHA verification is required"),
 })
 
 export async function POST(request: Request) {
@@ -38,23 +38,32 @@ export async function POST(request: Request) {
     const validation = resetPasswordSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: validation.error.errors.map(e => `${e.path.join(".")}: ${e.message}`).join(", ") },
+        { error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ") },
         { status: 400 }
       )
     }
 
-    const { password } = validation.data
+    const { password, recaptchaToken } = validation.data
 
-    // reCAPTCHA temporarily disabled for testing
-    // const isValid = await verifyRecaptcha(recaptchaToken)
-    // if (!isValid) {
-    //   logger.warn("reCAPTCHA verification failed for reset password")
-    //   return NextResponse.json(
-    //     { error: "reCAPTCHA verification failed. Please try again." },
-    //     { status: 400 }
-    //   )
-    // }
+    // reCAPTCHA verification required for production
+    if (!recaptchaToken) {
+      logger.warn("reCAPTCHA token missing for reset password")
+      return NextResponse.json(
+        { error: "reCAPTCHA verification is required. Please try again." },
+        { status: 400 }
+      )
+    }
 
+    const isValid = await verifyRecaptcha(recaptchaToken)
+    if (!isValid) {
+      logger.warn("reCAPTCHA verification failed for reset password")
+      return NextResponse.json(
+        { error: "reCAPTCHA verification failed. Please try again." },
+        { status: 400 }
+      )
+    }
+
+    // Create Supabase client
     const supabase = await createClient()
 
     // For password reset, Supabase requires the user to be authenticated
@@ -63,7 +72,11 @@ export async function POST(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     
     if (userError || !user) {
-      logger.warn("No authenticated user for password reset", { error: userError?.message })
+      logger.warn("No authenticated user for password reset", { 
+        error: userError?.message, 
+        errorCode: userError?.status,
+        hasUser: !!user 
+      })
       return NextResponse.json(
         { error: "Invalid or expired reset token. Please click the reset link from your email again." },
         { status: 401 }
@@ -84,9 +97,20 @@ export async function POST(request: Request) {
     })
 
     if (updateError) {
-      logger.error("Password update failed", new Error(updateError.message), { userId: user.id })
+      logger.error("Password update failed", new Error(updateError.message), { 
+        userId: user.id,
+        errorCode: updateError.status 
+      })
+      
+      let errorMessage = "Failed to update password. Please try again."
+      if (updateError.message.includes("password") || updateError.message.includes("Password")) {
+        errorMessage = "Password does not meet requirements. Please use a stronger password."
+      } else if (updateError.message.includes("session") || updateError.message.includes("Session")) {
+        errorMessage = "Your session has expired. Please click the reset link from your email again."
+      }
+      
       return NextResponse.json(
-        { error: updateError.message || "Failed to update password" },
+        { error: errorMessage },
         { status: 400 }
       )
     }

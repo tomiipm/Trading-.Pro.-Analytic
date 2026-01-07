@@ -41,18 +41,27 @@ export async function POST(request: Request) {
       )
     }
 
-    const { email, password } = validation.data
+    const { email, password, recaptchaToken } = validation.data
 
-    // reCAPTCHA temporarily disabled for testing
-    // const isValid = await verifyRecaptcha(recaptchaToken)
-    // if (!isValid) {
-    //   logger.warn("reCAPTCHA verification failed", { email })
-    //   return NextResponse.json(
-    //     { error: "reCAPTCHA verification failed. Please try again." },
-    //     { status: 400 }
-    //   )
-    // }
+    // reCAPTCHA verification required for production
+    if (!recaptchaToken) {
+      logger.warn("reCAPTCHA token missing", { email })
+      return NextResponse.json(
+        { error: "reCAPTCHA verification is required. Please try again." },
+        { status: 400 }
+      )
+    }
 
+    const isValid = await verifyRecaptcha(recaptchaToken)
+    if (!isValid) {
+      logger.warn("reCAPTCHA verification failed", { email })
+      return NextResponse.json(
+        { error: "reCAPTCHA verification failed. Please try again." },
+        { status: 400 }
+      )
+    }
+
+    // Create Supabase client
     const supabase = await createClient()
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -61,17 +70,25 @@ export async function POST(request: Request) {
     })
 
     if (error) {
-      logger.warn("Login failed", { email, error: error.message })
+      logger.warn("Login failed", { email, error: error.message, errorCode: error.status })
       
-      // Provide user-friendly error messages
-      let errorMessage = error.message
+      // Provide user-friendly error messages based on Supabase error codes
+      let errorMessage = "Invalid email or password. Please try again."
       
-      if (error.message.includes("Email not confirmed") || error.message.includes("email_not_confirmed")) {
+      if (error.message.includes("Email not confirmed") || 
+          error.message.includes("email_not_confirmed") ||
+          error.status === 401) {
         errorMessage = "Please check your email and confirm your account before logging in."
-      } else if (error.message.includes("Invalid login credentials") || error.message.includes("invalid_credentials")) {
-        errorMessage = "Invalid email or password. Please try again."
-      } else if (error.message.includes("too many requests")) {
-        errorMessage = "Too many login attempts. Please try again later."
+      } else if (error.message.includes("Invalid login credentials") || 
+                 error.message.includes("invalid_credentials") ||
+                 error.message.includes("Invalid")) {
+        errorMessage = "Invalid email or password. Please check your credentials and try again."
+      } else if (error.message.includes("too many requests") || 
+                 error.message.includes("rate limit")) {
+        errorMessage = "Too many login attempts. Please wait a few minutes and try again."
+      } else if (error.message.includes("network") || 
+                 error.message.includes("Network")) {
+        errorMessage = "Network error. Please check your connection and try again."
       }
       
       return NextResponse.json(
@@ -80,12 +97,21 @@ export async function POST(request: Request) {
       )
     }
     
-    // Check if email is confirmed
+    // Check if email is confirmed (Supabase may return user even if not confirmed)
     if (data.user && !data.user.email_confirmed_at) {
-      logger.warn("Login attempted with unconfirmed email", { email: data.user.email })
+      logger.warn("Login attempted with unconfirmed email", { email: data.user.email, userId: data.user.id })
       return NextResponse.json(
         { error: "Please check your email and confirm your account before logging in." },
         { status: 401 }
+      )
+    }
+
+    // Verify session exists
+    if (!data.session) {
+      logger.warn("Login succeeded but no session created", { email: data.user?.email })
+      return NextResponse.json(
+        { error: "Login failed. Please try again." },
+        { status: 500 }
       )
     }
 

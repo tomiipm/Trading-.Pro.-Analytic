@@ -4,10 +4,11 @@ import { verifyRecaptcha } from "@/lib/recaptcha"
 import { rateLimiters } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
 import { z } from "zod"
+import { getServerSiteUrl } from "@/lib/config"
 
 const forgotPasswordSchema = z.object({
   email: z.string().email("Invalid email format"),
-  recaptchaToken: z.string().optional(), // Temporarily disabled
+  recaptchaToken: z.string().min(1, "reCAPTCHA verification is required"),
 })
 
 export async function POST(request: Request) {
@@ -41,34 +42,57 @@ export async function POST(request: Request) {
     const validation = forgotPasswordSchema.safeParse(body)
     if (!validation.success) {
       return NextResponse.json(
-        { error: validation.error.errors.map(e => `${e.path.join(".")}: ${e.message}`).join(", ") },
+        { error: validation.error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", ") },
         { status: 400 }
       )
     }
 
-    const { email } = validation.data
+    const { email, recaptchaToken } = validation.data
 
-    // reCAPTCHA temporarily disabled for testing
-    // const isValid = await verifyRecaptcha(recaptchaToken)
-    // if (!isValid) {
-    //   logger.warn("reCAPTCHA verification failed for forgot password", { email })
-    //   return NextResponse.json(
-    //     { error: "reCAPTCHA verification failed. Please try again." },
-    //     { status: 400 }
-    //   )
-    // }
+    // reCAPTCHA verification required for production
+    if (!recaptchaToken) {
+      logger.warn("reCAPTCHA token missing for forgot password", { email })
+      return NextResponse.json(
+        { error: "reCAPTCHA verification is required. Please try again." },
+        { status: 400 }
+      )
+    }
 
+    const isValid = await verifyRecaptcha(recaptchaToken)
+    if (!isValid) {
+      logger.warn("reCAPTCHA verification failed for forgot password", { email })
+      return NextResponse.json(
+        { error: "reCAPTCHA verification failed. Please try again." },
+        { status: 400 }
+      )
+    }
+
+    // Create Supabase client
     const supabase = await createClient()
+
+    // Get site URL using helper function
+    const siteUrl = getServerSiteUrl(request)
+
+    // Validate site URL
+    if (!siteUrl || !siteUrl.startsWith("http")) {
+      logger.error("Invalid site URL configuration for password reset", { siteUrl })
+      // Still return success to prevent information leakage
+      return NextResponse.json({
+        success: true,
+        message: "If an account with that email exists, we've sent a password reset link.",
+      })
+    }
 
     // Send password reset email
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${request.headers.get("origin") || "https://trading-pro-analytic.com"}/reset-password`,
+      redirectTo: `${siteUrl}/reset-password`,
     })
 
     if (error) {
       // Don't reveal if email exists or not (security best practice)
-      logger.warn("Password reset request failed", { email, error: error.message })
+      logger.warn("Password reset request failed", { email, error: error.message, errorCode: error.status })
       // Return success anyway to prevent email enumeration
+      // This is a security best practice - don't reveal if email exists
       return NextResponse.json({
         success: true,
         message: "If an account with that email exists, we've sent a password reset link.",

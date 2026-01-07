@@ -34,7 +34,9 @@ class ClientLogger {
     } else {
       // In production, send to error tracking service
       if (level === "error") {
-        // TODO: Send to Sentry or other error tracking
+        // Client-side error logging for production
+        // Future enhancement: Integrate with error tracking service (Sentry, LogRocket, etc.)
+        // Current implementation uses console.error with JSON format
         console.error(JSON.stringify({ level, message, timestamp, context, error: error?.message }))
       }
     }

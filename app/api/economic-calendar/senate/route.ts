@@ -2,6 +2,7 @@ import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { rateLimiters } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
+import { checkPremiumSubscription } from "@/lib/subscription-check"
 
 export async function GET(request: Request) {
   // Rate limiting
@@ -51,16 +52,9 @@ export async function GET(request: Request) {
     }
 
     // Check subscription
-    const { data: subscription } = await supabase
-      .from("user_subscriptions")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("status", "active")
-      .gt("expires_at", new Date().toISOString())
-      .eq("subscription_type", "premium")
-      .single()
+    const hasPremium = await checkPremiumSubscription(supabase, user.id)
 
-    if (!subscription) {
+    if (!hasPremium) {
       return NextResponse.json(
         { error: "Premium subscription required" },
         { status: 403 }

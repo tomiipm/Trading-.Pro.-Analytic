@@ -15,6 +15,7 @@ import { HolidaysComponent } from "@/components/premium/holidays"
 import { EconomicIndicatorsComponent } from "@/components/premium/economic-indicators"
 import { SenateTradingComponent } from "@/components/premium/senate-trading"
 import { clientLogger } from "@/lib/logger-client"
+import { useI18n } from "@/lib/i18n/context"
 
 interface EconomicEvent {
   date: string
@@ -30,6 +31,7 @@ interface EconomicEvent {
 export default function EconomicCalendarPage() {
   const router = useRouter()
   const { user, subscription, loading: authLoading, isPremium } = useAuth()
+  const { t } = useI18n()
   const [events, setEvents] = useState<EconomicEvent[]>([])
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState<"all" | "high" | "medium" | "low">("all")
@@ -64,9 +66,9 @@ export default function EconomicCalendarPage() {
   }
 
   const pieData = [
-    { name: "Wysokie ryzyko", value: impactCounts.high, color: "#ef4444" },
-    { name: "Średnie ryzyko", value: impactCounts.medium, color: "#f59e0b" },
-    { name: "Niskie ryzyko", value: impactCounts.low, color: "#10b981" },
+    { name: t.economicCalendarPage.highRisk, value: impactCounts.high, color: "#ef4444" },
+    { name: t.economicCalendarPage.mediumRisk, value: impactCounts.medium, color: "#f59e0b" },
+    { name: t.economicCalendarPage.lowRisk, value: impactCounts.low, color: "#10b981" },
   ]
 
   const getImpactColor = (impact: string) => {
@@ -101,45 +103,45 @@ export default function EconomicCalendarPage() {
           <div className="flex items-center justify-center gap-3">
             <Calendar className="h-10 w-10 text-cyan-500" />
             <h1 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-              Kalendarz Ekonomiczny
+              {t.economicCalendarPage.title}
             </h1>
           </div>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Monitoruj nadchodzące wydarzenia ekonomiczne i unikaj handlowania w okresach wysokiego ryzyka
+            {t.economicCalendarPage.description}
           </p>
         </div>
 
         {/* Premium Features Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="calendar">Kalendarz</TabsTrigger>
+            <TabsTrigger value="calendar">{t.economicCalendarPage.calendar}</TabsTrigger>
             <TabsTrigger value="dcf" disabled={!isUserPremium}>
               <div className="flex items-center gap-2">
-                DCF Levered
+                {t.economicCalendarPage.dcfLevered}
                 {!isUserPremium && <Lock className="h-3 w-3" />}
               </div>
             </TabsTrigger>
             <TabsTrigger value="cot" disabled={!isUserPremium}>
               <div className="flex items-center gap-2">
-                COT Analysis
+                {t.economicCalendarPage.cotAnalysis}
                 {!isUserPremium && <Lock className="h-3 w-3" />}
               </div>
             </TabsTrigger>
             <TabsTrigger value="holidays" disabled={!isUserPremium}>
               <div className="flex items-center gap-2">
-                Holidays
+                {t.economicCalendarPage.holidays}
                 {!isUserPremium && <Lock className="h-3 w-3" />}
               </div>
             </TabsTrigger>
             <TabsTrigger value="indicators" disabled={!isUserPremium}>
               <div className="flex items-center gap-2">
-                Indicators
+                {t.economicCalendarPage.indicators}
                 {!isUserPremium && <Lock className="h-3 w-3" />}
               </div>
             </TabsTrigger>
             <TabsTrigger value="senate" disabled={!isUserPremium}>
               <div className="flex items-center gap-2">
-                Senate Trading
+                {t.economicCalendarPage.senateTrading}
                 {!isUserPremium && <Lock className="h-3 w-3" />}
               </div>
             </TabsTrigger>
@@ -152,7 +154,7 @@ export default function EconomicCalendarPage() {
           <Card className="p-6 border-cyan-500/50 bg-gradient-to-br from-cyan-500/10 to-transparent shadow-[0_0_20px_rgba(6,182,212,0.2)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Wszystkie wydarzenia</p>
+                <p className="text-sm text-muted-foreground">{t.economicCalendarPage.allEvents}</p>
                 <p className="text-3xl font-bold text-cyan-400">{events.length}</p>
               </div>
               <Activity className="h-10 w-10 text-cyan-500" />
@@ -162,7 +164,7 @@ export default function EconomicCalendarPage() {
           <Card className="p-6 border-red-500/50 bg-gradient-to-br from-red-500/10 to-transparent shadow-[0_0_20px_rgba(239,68,68,0.2)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Wysokie ryzyko</p>
+                <p className="text-sm text-muted-foreground">{t.economicCalendarPage.highRisk}</p>
                 <p className="text-3xl font-bold text-red-400">{impactCounts.high}</p>
               </div>
               <AlertTriangle className="h-10 w-10 text-red-500" />
@@ -172,7 +174,7 @@ export default function EconomicCalendarPage() {
           <Card className="p-6 border-amber-500/50 bg-gradient-to-br from-amber-500/10 to-transparent shadow-[0_0_20px_rgba(245,158,11,0.2)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Średnie ryzyko</p>
+                <p className="text-sm text-muted-foreground">{t.economicCalendarPage.mediumRisk}</p>
                 <p className="text-3xl font-bold text-amber-400">{impactCounts.medium}</p>
               </div>
               <TrendingUp className="h-10 w-10 text-amber-500" />
@@ -182,7 +184,7 @@ export default function EconomicCalendarPage() {
           <Card className="p-6 border-emerald-500/50 bg-gradient-to-br from-emerald-500/10 to-transparent shadow-[0_0_20px_rgba(16,185,129,0.2)]">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted-foreground">Niskie ryzyko</p>
+                <p className="text-sm text-muted-foreground">{t.economicCalendarPage.lowRisk}</p>
                 <p className="text-3xl font-bold text-emerald-400">{impactCounts.low}</p>
               </div>
               <Clock className="h-10 w-10 text-emerald-500" />
@@ -192,7 +194,7 @@ export default function EconomicCalendarPage() {
 
         {/* Pie Chart */}
         <Card className="p-8 border-cyan-500/50 shadow-[0_0_20px_rgba(6,182,212,0.2)]">
-          <h2 className="text-2xl font-bold mb-6 text-center text-cyan-400">Rozkład ryzyka wydarzeń</h2>
+          <h2 className="text-2xl font-bold mb-6 text-center text-cyan-400">{t.economicCalendarPage.riskDistribution}</h2>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -201,7 +203,7 @@ export default function EconomicCalendarPage() {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={({ name, percent }) => `${name} ${((percent || 0) * 100).toFixed(0)}%`}
                   outerRadius={120}
                   fill="#8884d8"
                   dataKey="value"
@@ -227,7 +229,7 @@ export default function EconomicCalendarPage() {
                 : "bg-card border border-cyan-500/30 hover:border-cyan-500"
             }`}
           >
-            Wszystkie
+            {t.economicCalendarPage.all}
           </button>
           <button
             onClick={() => setFilter("high")}
@@ -237,7 +239,7 @@ export default function EconomicCalendarPage() {
                 : "bg-card border border-red-500/30 hover:border-red-500"
             }`}
           >
-            Wysokie ryzyko
+            {t.economicCalendarPage.highRisk}
           </button>
           <button
             onClick={() => setFilter("medium")}
@@ -247,7 +249,7 @@ export default function EconomicCalendarPage() {
                 : "bg-card border border-amber-500/30 hover:border-amber-500"
             }`}
           >
-            Średnie ryzyko
+            {t.economicCalendarPage.mediumRisk}
           </button>
           <button
             onClick={() => setFilter("low")}
@@ -257,18 +259,18 @@ export default function EconomicCalendarPage() {
                 : "bg-card border border-emerald-500/30 hover:border-emerald-500"
             }`}
           >
-            Niskie ryzyko
+            {t.economicCalendarPage.lowRisk}
           </button>
         </div>
 
         {/* Events List */}
         {loading ? (
           <Card className="p-12 text-center border-cyan-500/50">
-            <p className="text-muted-foreground">Ładowanie wydarzeń...</p>
+            <p className="text-muted-foreground">{t.economicCalendarPage.loadingEvents}</p>
           </Card>
         ) : filteredEvents.length === 0 ? (
           <Card className="p-12 text-center border-cyan-500/50">
-            <p className="text-muted-foreground">Brak wydarzeń do wyświetlenia</p>
+            <p className="text-muted-foreground">{t.economicCalendarPage.noEvents}</p>
           </Card>
         ) : (
           <div className="grid gap-4">
@@ -281,7 +283,7 @@ export default function EconomicCalendarPage() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <span className={`px-3 py-1 rounded-full text-xs font-bold ${getImpactBadgeColor(event.impact)}`}>
-                        {event.impact === "high" ? "WYSOKIE" : event.impact === "medium" ? "ŚREDNIE" : "NISKIE"}
+                        {event.impact === "high" ? t.economicCalendarPage.high : event.impact === "medium" ? t.economicCalendarPage.medium : t.economicCalendarPage.low}
                       </span>
                       <span className="text-sm text-muted-foreground flex items-center gap-1">
                         <Clock className="h-3 w-3" />
@@ -293,19 +295,19 @@ export default function EconomicCalendarPage() {
                     <div className="flex gap-6 text-sm">
                       {event.previous && (
                         <div>
-                          <span className="text-muted-foreground">Poprzednia: </span>
+                          <span className="text-muted-foreground">{t.economicCalendarPage.previous}: </span>
                           <span className="font-medium">{event.previous}</span>
                         </div>
                       )}
                       {event.forecast && (
                         <div>
-                          <span className="text-muted-foreground">Prognoza: </span>
+                          <span className="text-muted-foreground">{t.economicCalendarPage.forecast}: </span>
                           <span className="font-medium">{event.forecast}</span>
                         </div>
                       )}
                       {event.actual && (
                         <div>
-                          <span className="text-muted-foreground">Rzeczywista: </span>
+                          <span className="text-muted-foreground">{t.economicCalendarPage.actual}: </span>
                           <span className="font-medium">{event.actual}</span>
                         </div>
                       )}
@@ -314,7 +316,7 @@ export default function EconomicCalendarPage() {
                   {event.impact === "high" && (
                     <div className="flex items-center gap-2 bg-red-500/20 px-4 py-2 rounded-lg border border-red-500/50">
                       <AlertTriangle className="h-5 w-5 text-red-500" />
-                      <span className="text-sm font-medium text-red-400">Unikaj handlowania!</span>
+                      <span className="text-sm font-medium text-red-400">{t.economicCalendarPage.avoidTrading}</span>
                     </div>
                   )}
                 </div>
@@ -329,14 +331,14 @@ export default function EconomicCalendarPage() {
             {!isUserPremium ? (
               <Card className="p-12 text-center border-cyan-500/50">
                 <Crown className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold mb-2">Funkcja Premium</h2>
+                <h2 className="text-2xl font-bold mb-2">{t.economicCalendarPage.premiumFeature}</h2>
                 <p className="text-muted-foreground mb-6">
-                  Custom DCF Levered jest dostępne tylko dla użytkowników Premium
+                  {t.economicCalendarPage.dcfLevered} {t.economicCalendarPage.premiumOnly}
                 </p>
                 <Button asChild>
                   <Link href="/subscriptions">
                     <Crown className="mr-2 h-4 w-4" />
-                    Przejdź do Premium
+                    {t.economicCalendarPage.goToPremium}
                   </Link>
                 </Button>
               </Card>
@@ -350,9 +352,9 @@ export default function EconomicCalendarPage() {
             {!isUserPremium ? (
               <Card className="p-12 text-center border-cyan-500/50">
                 <Crown className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold mb-2">Funkcja Premium</h2>
+                <h2 className="text-2xl font-bold mb-2">{t.economicCalendarPage.premiumFeature}</h2>
                 <p className="text-muted-foreground mb-6">
-                  COT Analysis By Dates jest dostępne tylko dla użytkowników Premium
+                  {t.economicCalendarPage.cotAnalysis} {t.economicCalendarPage.premiumOnly}
                 </p>
                 <Button asChild>
                   <Link href="/subscriptions">
@@ -371,9 +373,9 @@ export default function EconomicCalendarPage() {
             {!isUserPremium ? (
               <Card className="p-12 text-center border-cyan-500/50">
                 <Crown className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold mb-2">Funkcja Premium</h2>
+                <h2 className="text-2xl font-bold mb-2">{t.economicCalendarPage.premiumFeature}</h2>
                 <p className="text-muted-foreground mb-6">
-                  Holidays By Exchange jest dostępne tylko dla użytkowników Premium
+                  {t.economicCalendarPage.holidays} {t.economicCalendarPage.premiumOnly}
                 </p>
                 <Button asChild>
                   <Link href="/subscriptions">
@@ -392,9 +394,9 @@ export default function EconomicCalendarPage() {
             {!isUserPremium ? (
               <Card className="p-12 text-center border-cyan-500/50">
                 <Crown className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold mb-2">Funkcja Premium</h2>
+                <h2 className="text-2xl font-bold mb-2">{t.economicCalendarPage.premiumFeature}</h2>
                 <p className="text-muted-foreground mb-6">
-                  Economics Indicators jest dostępne tylko dla użytkowników Premium
+                  {t.economicCalendarPage.indicators} {t.economicCalendarPage.premiumOnly}
                 </p>
                 <Button asChild>
                   <Link href="/subscriptions">
@@ -412,9 +414,9 @@ export default function EconomicCalendarPage() {
             {!isUserPremium ? (
               <Card className="p-12 text-center border-cyan-500/50">
                 <Crown className="h-16 w-16 text-yellow-500 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold mb-2">Funkcja Premium</h2>
+                <h2 className="text-2xl font-bold mb-2">{t.economicCalendarPage.premiumFeature}</h2>
                 <p className="text-muted-foreground mb-6">
-                  Senate Trading jest dostępne tylko dla użytkowników Premium
+                  {t.economicCalendarPage.senateTrading} {t.economicCalendarPage.premiumOnly}
                 </p>
                 <Button asChild>
                   <Link href="/subscriptions">

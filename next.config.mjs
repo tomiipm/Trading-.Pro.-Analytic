@@ -18,6 +18,9 @@ const nextConfig = {
     PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET,
   },
   images: {
+    // Note: unoptimized: true is set for compatibility with some hosting providers
+    // that don't support Next.js Image Optimization API
+    // For production on Vercel/Netlify, consider setting to false for better performance
     unoptimized: true,
     remotePatterns: [
       {

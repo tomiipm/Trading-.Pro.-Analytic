@@ -4,14 +4,14 @@ import { z } from "zod"
 export const loginSchema = z.object({
   email: z.string().email("Invalid email format"),
   password: z.string().min(6, "Password must be at least 6 characters"),
-  recaptchaToken: z.string().optional(), // Temporarily disabled
+  recaptchaToken: z.string().min(1, "reCAPTCHA verification is required"),
 })
 
 export const signupSchema = z.object({
   email: z.string().email("Invalid email format"),
   password: z.string().min(6, "Password must be at least 6 characters"),
   fullName: z.string().optional(),
-  recaptchaToken: z.string().optional(), // Temporarily disabled
+  recaptchaToken: z.string().min(1, "reCAPTCHA verification is required"),
 })
 
 // Subscription validation
@@ -47,7 +47,7 @@ export function validateAndParse<T>(schema: z.ZodSchema<T>, data: unknown): { su
     if (error instanceof z.ZodError) {
       return {
         success: false,
-        error: error.errors.map(e => `${e.path.join(".")}: ${e.message}`).join(", "),
+        error: error.issues.map(e => `${e.path.join(".")}: ${e.message}`).join(", "),
       }
     }
     return { success: false, error: "Validation failed" }

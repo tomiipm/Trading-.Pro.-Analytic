@@ -138,15 +138,18 @@ CREATE INDEX IF NOT EXISTS idx_premium_subscriptions_expires_at ON public.premiu
 ALTER TABLE public.premium_subscriptions ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies for premium_subscriptions
+-- Users can only read their own premium subscriptions (matched by email)
 CREATE POLICY "Users can read their own premium subscriptions" ON public.premium_subscriptions
   FOR SELECT
-  USING (true);
+  USING (
+    EXISTS (
+      SELECT 1 FROM user_profiles 
+      WHERE user_profiles.email = premium_subscriptions.email 
+      AND user_profiles.user_id = auth.uid()
+    )
+  );
 
-CREATE POLICY "API can insert premium subscriptions" ON public.premium_subscriptions
-  FOR INSERT
-  WITH CHECK (true);
-
-CREATE POLICY "API can update premium subscriptions" ON public.premium_subscriptions
-  FOR UPDATE
-  USING (true);
+-- Note: INSERT and UPDATE operations are handled by service_role in webhook
+-- Service role bypasses RLS, so we don't need policies for INSERT/UPDATE
+-- This is more secure as only the backend can modify premium_subscriptions
 

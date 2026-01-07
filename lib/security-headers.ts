@@ -9,10 +9,13 @@ export function securityHeaders(request: NextRequest, response?: NextResponse) {
   const targetResponse = response || NextResponse.next()
 
   // Content Security Policy
+  // Note: 'unsafe-inline' for script-src is required for Google reCAPTCHA v2
+  // reCAPTCHA may inject inline scripts that need to execute
+  // 'unsafe-eval' has been removed as it's not needed (no eval() usage in codebase)
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.google.com https://www.gstatic.com",
-    "style-src 'self' 'unsafe-inline'",
+    "script-src 'self' 'unsafe-inline' https://www.google.com https://www.gstatic.com",
+    "style-src 'self' 'unsafe-inline'", // Next.js may generate inline styles
     "img-src 'self' data: https: blob:",
     "font-src 'self' data:",
     "connect-src 'self' https://*.supabase.co https://api.signal.iplinseparable.com https://financialmodelingprep.com https://www.google.com",

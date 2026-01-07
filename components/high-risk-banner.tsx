@@ -185,7 +185,7 @@ export function HighRiskBanner() {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-2">
                 <h3 className="text-lg md:text-xl font-bold text-red-400">
-                  ⚠️ {t.highRiskBanner?.title || "Upcoming High-Risk Event!"}
+                  ⚠️ {"Upcoming High-Risk Event!"}
                 </h3>
               </div>
               <div className="space-y-2 text-sm md:text-base">
@@ -204,8 +204,8 @@ export function HighRiskBanner() {
                   {hoursUntil >= 0 && (
                     <span className="text-red-400 font-semibold">
                       {(() => {
-                        const inText = t.highRiskBanner?.in || "In"
-                        const minutesText = t.highRiskBanner?.minutes || "minutes"
+                        const inText = "In"
+                        const minutesText = "minutes"
                         if (hoursUntil > 0) {
                           return `${inText} ${hoursUntil}h ${minutesUntil}m`
                         } else {
@@ -217,7 +217,7 @@ export function HighRiskBanner() {
                 </div>
                 {upcomingHighRiskEvent.forecast && (
                   <div className="text-sm">
-                    <span className="text-muted-foreground">{t.highRiskBanner?.forecast || "Forecast"}: </span>
+                    <span className="text-muted-foreground">{"Forecast"}: </span>
                     <span className="font-medium">{upcomingHighRiskEvent.forecast}</span>
                   </div>
                 )}
@@ -228,7 +228,7 @@ export function HighRiskBanner() {
                 <div className="flex items-start gap-2">
                   <ShieldAlert className="h-4 w-4 text-red-400 mt-0.5 flex-shrink-0" />
                   <p className="text-xs md:text-sm text-red-200 leading-relaxed">
-                    <strong className="font-semibold">{t.highRiskBanner?.riskWarning || "Risk Warning"}:</strong> {t.highRiskBanner?.riskWarningText || "During high-risk events, prices may change rapidly, which can lead to significant losses. Consider avoiding trading or reducing exposure to risk."}
+                    <strong className="font-semibold">{"Risk Warning"}:</strong> {"During high-risk events, prices may change rapidly, which can lead to significant losses. Consider avoiding trading or reducing exposure to risk."}
                   </p>
                 </div>
               </div>
@@ -236,7 +236,7 @@ export function HighRiskBanner() {
               <div className="mt-3">
                 <Link href="/economic-calendar">
                   <Button variant="outline" size="sm" className="border-red-500/50 text-red-400 hover:bg-red-500/20">
-                    {t.highRiskBanner?.viewCalendar || t.nav.calendar || "View Economic Calendar"}
+                    {t.nav.calendar || "View Economic Calendar"}
                   </Button>
                 </Link>
               </div>

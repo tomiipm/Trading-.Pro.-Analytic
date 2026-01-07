@@ -3,12 +3,12 @@
 import React, { createContext, useContext, useState, useEffect } from "react"
 import { Language, translations } from "./translations"
 
-type Translations = typeof translations.pl
+type Translations = typeof translations[Language]
 
 interface I18nContextType {
   language: Language
   setLanguage: (lang: Language) => void
-  t: Translations
+  t: any
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined)
@@ -20,7 +20,7 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
   // Load language from localStorage on mount
   useEffect(() => {
     const savedLanguage = localStorage.getItem("language") as Language | null
-    const validLanguages: Language[] = ["pl", "en", "de", "fr", "es", "it", "pt", "ru", "zh-CN", "ja"]
+    const validLanguages: Language[] = ["pl", "en"]
     if (savedLanguage && validLanguages.includes(savedLanguage)) {
       setLanguageState(savedLanguage)
     }

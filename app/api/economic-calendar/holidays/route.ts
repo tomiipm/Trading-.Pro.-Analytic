@@ -2,6 +2,8 @@ import { NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { rateLimiters } from "@/lib/rate-limit"
 import { logger } from "@/lib/logger"
+import { checkPremiumSubscription } from "@/lib/subscription-check"
+import { z } from "zod"
 
 const FMP_API_URL = process.env.FMP_API_URL || "https://financialmodelingprep.com/api/v3"
 
@@ -53,16 +55,9 @@ export async function GET(request: Request) {
     }
 
     // Check subscription
-    const { data: subscription } = await supabase
-      .from("user_subscriptions")
-      .select("*")
-      .eq("user_id", user.id)
-      .eq("status", "active")
-      .gt("expires_at", new Date().toISOString())
-      .eq("subscription_type", "premium")
-      .single()
+    const hasPremium = await checkPremiumSubscription(supabase, user.id)
 
-    if (!subscription) {
+    if (!hasPremium) {
       return NextResponse.json(
         { error: "Premium subscription required" },
         { status: 403 }
@@ -70,8 +65,29 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url)
-    const exchange = searchParams.get("exchange") || "NYSE"
-    const year = searchParams.get("year") || new Date().getFullYear().toString()
+    const exchangeParam = searchParams.get("exchange") || "NYSE"
+    const yearParam = searchParams.get("year") || new Date().getFullYear().toString()
+    
+    // Validate exchange parameter (common exchanges)
+    const exchangeSchema = z.string().min(1).max(10).regex(/^[A-Z]+$/, "Invalid exchange format")
+    const yearSchema = z.string().regex(/^\d{4}$/, "Invalid year format. Must be YYYY.")
+    
+    const exchangeValidation = exchangeSchema.safeParse(exchangeParam)
+    const yearValidation = yearSchema.safeParse(yearParam)
+    
+    if (!exchangeValidation.success || !yearValidation.success) {
+      return NextResponse.json(
+        { 
+          success: false,
+          error: "Invalid parameters. Exchange must be uppercase letters, year must be YYYY format.",
+          data: [],
+        },
+        { status: 400 }
+      )
+    }
+    
+    const exchange = exchangeValidation.data
+    const year = yearValidation.data
 
     // FMP API endpoint for market holidays
     // Using the correct endpoint: /stable/holidays-by-exchange

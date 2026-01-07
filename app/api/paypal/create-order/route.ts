@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
 import { logger } from "@/lib/logger"
+import { getServerSiteUrl } from "@/lib/config"
 
 // PayPal environment - in production, default to "live", in development default to "sandbox"
 // But prefer explicit PAYPAL_ENV if set
@@ -10,12 +11,12 @@ const PAYPAL_CLIENT_SECRET = process.env.PAYPAL_CLIENT_SECRET
 
 // In production, PayPal should always be "live"
 if (process.env.NODE_ENV === "production" && PAYPAL_ENV !== "live") {
-  logger.error("PayPal environment must be 'live' in production", { currentEnv: PAYPAL_ENV })
+  logger.warn("PayPal environment should be 'live' in production", { currentEnv: PAYPAL_ENV })
 }
 
 // Validate PayPal credentials
 if (!PAYPAL_CLIENT_ID || !PAYPAL_CLIENT_SECRET) {
-  logger.error("PayPal credentials are missing", { env: PAYPAL_ENV })
+  logger.error("PayPal credentials are missing", undefined, { env: PAYPAL_ENV })
 }
 
 const PAYPAL_API_BASE =
@@ -82,6 +83,9 @@ export async function POST(request: NextRequest) {
 
     const accessToken = await getPayPalAccessToken()
 
+    // Get site URL using helper function
+    const siteUrl = getServerSiteUrl(request)
+    
     // Create PayPal order
     const orderData = {
       intent: "CAPTURE",
@@ -98,8 +102,8 @@ export async function POST(request: NextRequest) {
         brand_name: "Trading Pro Analytic",
         landing_page: "NO_PREFERENCE",
         user_action: "PAY_NOW",
-        return_url: `${request.headers.get("origin") || "https://trading-pro-analytic.com"}/subscriptions?success=true`,
-        cancel_url: `${request.headers.get("origin") || "https://trading-pro-analytic.com"}/subscriptions?canceled=true`,
+        return_url: `${siteUrl}/subscriptions?success=true`,
+        cancel_url: `${siteUrl}/subscriptions?canceled=true`,
       },
     }
 

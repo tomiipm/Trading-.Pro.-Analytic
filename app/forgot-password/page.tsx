@@ -42,11 +42,11 @@ export default function ForgotPasswordPage() {
     e.preventDefault()
     setError(null)
 
-    // reCAPTCHA temporarily disabled
-    // if (!recaptchaToken) {
-    //   setError("Proszę ukończyć weryfikację reCAPTCHA")
-    //   return
-    // }
+    // reCAPTCHA verification required for production
+    if (!recaptchaToken) {
+      setError(t.forgotPasswordPage.recaptchaRequired || "Please complete the reCAPTCHA verification")
+      return
+    }
 
     if (!email) {
       setError(t.auth.email ? `${t.auth.email} is required` : "Please enter your email address")
@@ -63,14 +63,25 @@ export default function ForgotPasswordPage() {
         },
         body: JSON.stringify({ 
           email,
-          // recaptchaToken: recaptchaToken || undefined,
+          recaptchaToken: recaptchaToken,
         }),
       })
 
-      const data = await response.json()
-
       if (!response.ok) {
-        setError(data.error || t.common.error || "Failed to send reset email")
+        let errorMessage = t.common.error || "Failed to send reset email"
+        try {
+          const data = await response.json()
+          errorMessage = data.error || errorMessage
+        } catch (parseError) {
+          // If response is not JSON, use status text or default message
+          if (response.status === 429) {
+            errorMessage = t.forgotPasswordPage.tooManyAttempts || "Too many requests. Please try again later."
+          } else {
+            errorMessage = response.statusText || errorMessage
+          }
+        }
+        setError(errorMessage)
+        toast.error(errorMessage)
         // Reset reCAPTCHA on error
         if (recaptchaRef.current) {
           recaptchaRef.current.reset()
@@ -79,10 +90,15 @@ export default function ForgotPasswordPage() {
         return
       }
 
+      const data = await response.json()
+      
+      // Always show success message (security best practice - don't reveal if email exists)
       setSuccess(true)
-      toast.success(t.forgotPasswordPage.successMessage)
+      toast.success(data.message || t.forgotPasswordPage.successMessage || "If an account with that email exists, we've sent a password reset link.")
     } catch (err) {
-      setError(t.common.error || "An error occurred. Please try again.")
+      console.error("Forgot password error:", err)
+      const errorMessage = err instanceof Error ? err.message : (t.common.error || "An error occurred. Please try again.")
+      setError(errorMessage)
       // Reset reCAPTCHA on error
       if (recaptchaRef.current) {
         recaptchaRef.current.reset()
@@ -125,7 +141,7 @@ export default function ForgotPasswordPage() {
                   setRecaptchaToken(null)
                 }}
               >
-                {t.common.refresh || "Try Again"}
+                {t.common.cancel || "Try Again"}
               </Button>
               <Button 
                 variant="default" 
@@ -176,23 +192,25 @@ export default function ForgotPasswordPage() {
               </div>
             </div>
 
-            {/* reCAPTCHA temporarily disabled */}
-            {/* <div className="space-y-2">
-              <Label className="text-sm font-medium">Weryfikacja bezpieczeństwa</Label>
-              <div className="flex justify-center py-2">
-                <ReCaptcha
-                  ref={recaptchaRef}
-                  siteKey={recaptchaSiteKey}
-                  onVerify={handleRecaptchaVerify}
-                  onExpire={handleRecaptchaExpire}
-                />
+            {/* reCAPTCHA verification */}
+            {recaptchaSiteKey && (
+              <div className="space-y-2">
+                <Label className="text-sm font-medium">{t.forgotPasswordPage.securityVerification || "Security Verification"}</Label>
+                <div className="flex justify-center py-2">
+                  <ReCaptcha
+                    ref={recaptchaRef}
+                    siteKey={recaptchaSiteKey}
+                    onVerify={handleRecaptchaVerify}
+                    onExpire={handleRecaptchaExpire}
+                  />
+                </div>
+                {!recaptchaToken && (
+                  <p className="text-xs text-muted-foreground text-center">
+                    {t.forgotPasswordPage.recaptchaInstructions || "Please complete the reCAPTCHA verification to continue"}
+                  </p>
+                )}
               </div>
-              {!recaptchaToken && (
-                <p className="text-xs text-muted-foreground text-center">
-                  Zaznacz pole "Nie jestem robotem" aby kontynuować
-                </p>
-              )}
-            </div> */}
+            )}
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (
