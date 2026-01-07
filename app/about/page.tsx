@@ -42,7 +42,7 @@ export default function AboutPage() {
               <div className="mt-6 rounded-lg overflow-hidden bg-gradient-to-br from-cyan-500/10 to-blue-500/10 p-8 border border-cyan-500/20">
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                   <Image 
-                    src={encodeURI("/images/mobile-app/2026, 20_02_55.png")} 
+                    src="/images/mobile-app/20_02_55.png" 
                     alt="Trading Pro Analytic Platform - Zaawansowana platforma analityczna z AI" 
                     fill
                     className="object-contain rounded-lg"
@@ -63,47 +63,41 @@ export default function AboutPage() {
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-2">
                 <Cpu className="h-6 w-6 text-cyan-400" />
-                Jak Działają Nasze Algorytmy?
+                {t.about.howAlgorithmsWork}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg p-6 border border-cyan-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <Network className="h-5 w-5 text-cyan-400" />
-                  Architektura Systemu
+                  {t.about.systemArchitecture}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Nasz system opiera się na wielowarstwowej architekturze, która łączy różne komponenty analityczne:
+                  {t.about.systemArchitectureDesc}
                 </p>
                 <ul className="space-y-3 text-muted-foreground">
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-foreground">Warstwa zbierania danych:</strong> System pobiera dane bezpośrednio z głównych baz danych 
-                      w czasie rzeczywistym, bez żadnych opóźnień. Ceny do generowania sygnałów, dane ekonomiczne i inne informacje rynkowe są 
-                      pobierane bezpośrednio z wiodących dostawców danych finansowych (ceny tick-by-tick, wolumen transakcji, dane ekonomiczne, 
-                      wiadomości finansowe). Zapewnia to najwyższą aktualność i precyzję danych wykorzystywanych przez algorytmy AI.
+                      <strong className="text-foreground">{t.about.dataCollectionLayer}:</strong> {t.about.dataCollectionLayerDesc}
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-foreground">Warstwa przetwarzania:</strong> Dane są normalizowane, walidowane i przygotowywane 
-                      do analizy przez moduły preprocessingu
+                      <strong className="text-foreground">{t.about.processingLayer}:</strong> {t.about.processingLayerDesc}
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-foreground">Warstwa analityczna:</strong> Zaawansowane modele AI analizują dane używając 
-                      sieci neuronowych, uczenia maszynowego i analizy statystycznej
+                      <strong className="text-foreground">{t.about.analyticalLayer}:</strong> {t.about.analyticalLayerDesc}
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-green-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-foreground">Warstwa decyzyjna:</strong> System generuje sygnały handlowe z oceną prawdopodobieństwa, 
-                      poziomami wejścia/wyjścia i zarządzaniem ryzykiem
+                      <strong className="text-foreground">{t.about.decisionLayer}:</strong> {t.about.decisionLayerDesc}
                     </div>
                   </li>
                 </ul>
@@ -112,35 +106,31 @@ export default function AboutPage() {
               <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg p-6 border border-blue-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <Brain className="h-5 w-5 text-blue-400" />
-                  Technologie Sztucznej Inteligencji
+                  {t.about.aiTechnologies}
                 </h3>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Uczenie Maszynowe (ML)</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.machineLearning}</h4>
                     <p className="text-sm text-muted-foreground">
-                      System wykorzystuje algorytmy uczenia nadzorowanego i nienadzorowanego do identyfikacji wzorców rynkowych. 
-                      Modele są trenowane na historycznych danych obejmujących miliony transakcji i setki tysięcy sygnałów rynkowych.
+                      {t.about.machineLearningDesc}
                     </p>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Głębokie Uczenie (Deep Learning)</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.deepLearning}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Zaawansowane sieci neuronowe (LSTM, Transformer) analizują sekwencje czasowe danych rynkowych, 
-                      wykrywając długoterminowe zależności i trendy, które są niewidoczne dla tradycyjnych metod.
+                      {t.about.deepLearningDesc}
                     </p>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Reinforcement Learning</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.reinforcementLearning}</h4>
                     <p className="text-sm text-muted-foreground">
-                      System uczy się z własnych decyzji, optymalizując strategie handlowe poprzez ciągłe testowanie 
-                      i poprawianie wyników w symulowanym środowisku rynkowym.
+                      {t.about.reinforcementLearningDesc}
                     </p>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Ensemble Methods</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.ensembleMethods}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Kombinacja wielu modeli AI (ensemble) zapewnia większą dokładność i stabilność sygnałów, 
-                      redukując ryzyko błędów pojedynczego modelu.
+                      {t.about.ensembleMethodsDesc}
                     </p>
                   </div>
                 </div>
@@ -149,28 +139,28 @@ export default function AboutPage() {
               <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg p-6 border border-purple-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <BarChart3 className="h-5 w-5 text-purple-400" />
-                  Analiza Techniczna i Fundamentalna
+                  {t.about.technicalFundamentalAnalysis}
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Analiza Techniczna</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.technicalAnalysis}</h4>
                     <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-                      <li>Wskaźniki trendu: Moving Averages (SMA, EMA), MACD, ADX</li>
-                      <li>Wskaźniki momentum: RSI, Stochastic, Williams %R</li>
-                      <li>Analiza wolumenu: OBV, Volume Profile, VWAP</li>
-                      <li>Formacje wykresów: Wzorce świecowe, formacje kontynuacji i odwrócenia</li>
-                      <li>Poziomy wsparcia i oporu: Automatyczna identyfikacja kluczowych poziomów cenowych</li>
-                      <li>Analiza wielu timeframe'ów: H1, H4, D1, W1</li>
+                      <li>{t.about.trendIndicators}</li>
+                      <li>{t.about.momentumIndicators}</li>
+                      <li>{t.about.volumeAnalysis}</li>
+                      <li>{t.about.chartPatterns}</li>
+                      <li>{t.about.supportResistance}</li>
+                      <li>{t.about.multiTimeframe}</li>
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Analiza Fundamentalna</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.fundamentalAnalysis}</h4>
                     <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground ml-4">
-                      <li>Wydarzenia ekonomiczne: Decyzje banków centralnych, wskaźniki makroekonomiczne</li>
-                      <li>Kalendarz ekonomiczny: Analiza wpływu nadchodzących wydarzeń na rynek</li>
-                      <li>Sentyment rynku: Analiza wiadomości finansowych i social media</li>
-                      <li>Korelacje międzyrynkowe: Analiza zależności między różnymi instrumentami</li>
-                      <li>Dane COT (Commitment of Traders): Analiza pozycji dużych graczy</li>
+                      <li>{t.about.economicEvents}</li>
+                      <li>{t.about.economicCalendarAnalysis}</li>
+                      <li>{t.about.marketSentiment}</li>
+                      <li>{t.about.intermarketCorrelations}</li>
+                      <li>{t.about.cotData}</li>
                     </ul>
                   </div>
                 </div>
@@ -179,51 +169,45 @@ export default function AboutPage() {
               <div className="bg-gradient-to-r from-green-500/10 to-emerald-500/10 rounded-lg p-6 border border-green-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <Target className="h-5 w-5 text-green-400" />
-                  Generowanie Sygnałów Handlowych
+                  {t.about.signalGeneration}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Proces generowania sygnału składa się z następujących etapów:
+                  {t.about.signalGenerationDesc}
                 </p>
                 <ol className="space-y-3 text-muted-foreground">
                   <li className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-sm font-bold">1</span>
                     <div>
-                      <strong className="text-foreground">Identyfikacja możliwości:</strong> System skanuje wszystkie instrumenty w czasie rzeczywistym, 
-                      wykorzystując aktualne ceny pobierane bezpośrednio z głównych baz danych bez opóźnień. Identyfikuje sytuacje, gdzie konfluencja 
-                      wskaźników technicznych i fundamentalnych wskazuje na wysokie prawdopodobieństwo ruchu cenowego. Wszystkie dane cenowe są 
-                      aktualizowane w czasie rzeczywistym, co zapewnia precyzyjne sygnały oparte na najnowszych informacjach rynkowych.
+                      <strong className="text-foreground">{t.about.signalStep1Title}</strong> {t.about.signalStep1Desc}
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-sm font-bold">2</span>
                     <div>
-                      <strong className="text-foreground">Obliczanie prawdopodobieństwa:</strong> Każda możliwość jest oceniana przez zespół modeli AI, 
-                      które przypisują prawdopodobieństwo sukcesu w zakresie 0-100%. Sygnały z prawdopodobieństwem powyżej 60% są kwalifikowane do publikacji.
+                      <strong className="text-foreground">{t.about.signalStep2Title}</strong> {t.about.signalStep2Desc}
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-sm font-bold">3</span>
                     <div>
-                      <strong className="text-foreground">Określenie poziomów:</strong> System automatycznie oblicza optymalne poziomy:
+                      <strong className="text-foreground">{t.about.signalStep3Title}</strong> {t.about.signalStep3Desc}
                       <ul className="list-disc list-inside ml-4 mt-2 space-y-1">
-                        <li><strong>Entry Price:</strong> Cena wejścia w transakcję</li>
-                        <li><strong>Stop Loss (SL):</strong> Poziom ochrony przed stratą, obliczany na podstawie zmienności i struktury rynku</li>
-                        <li><strong>Take Profit (TP1, TP2, TP3):</strong> Poziomy zysku, gdzie TP3 jest głównym celem, a TP1 i TP2 są poziomami częściowego zamykania pozycji</li>
+                        <li>{t.about.signalStep3EntryPrice}</li>
+                        <li>{t.about.signalStep3StopLoss}</li>
+                        <li>{t.about.signalStep3TakeProfit}</li>
                       </ul>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-sm font-bold">4</span>
                     <div>
-                      <strong className="text-foreground">Obliczanie Risk/Reward:</strong> System automatycznie oblicza stosunek ryzyka do zysku, 
-                      zapewniając, że każdy sygnał ma minimum 1:1.5 Risk/Reward ratio.
+                      <strong className="text-foreground">{t.about.signalStep4Title}</strong> {t.about.signalStep4Desc}
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-sm font-bold">5</span>
                     <div>
-                      <strong className="text-foreground">Walidacja i publikacja:</strong> Sygnał przechodzi przez finalną walidację, 
-                      sprawdzając konfluencję wszystkich czynników, a następnie jest publikowany na platformie w czasie rzeczywistym.
+                      <strong className="text-foreground">{t.about.signalStep5Title}</strong> {t.about.signalStep5Desc}
                     </div>
                   </li>
                 </ol>
@@ -232,38 +216,37 @@ export default function AboutPage() {
               <div className="bg-gradient-to-r from-orange-500/10 to-red-500/10 rounded-lg p-6 border border-orange-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <Activity className="h-5 w-5 text-orange-400" />
-                  Obliczanie Pipsów i Punktów
+                  {t.about.pipsPointsCalculation}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Nasz system automatycznie dostosowuje obliczenia do specyfiki każdego instrumentu:
+                  {t.about.pipsPointsDesc}
                 </p>
                 <div className="grid md:grid-cols-2 gap-4 text-sm">
                   <div className="bg-background/50 rounded p-4">
-                    <h4 className="font-semibold mb-2 text-foreground">Pary Walutowe (Forex)</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.forexPairs}</h4>
                     <ul className="space-y-1 text-muted-foreground">
-                      <li>• Standardowe pary (EUR/USD, GBP/USD): 1 pip = 0.0001 (mnożnik 10,000)</li>
-                      <li>• Pary z JPY (USD/JPY, EUR/JPY): 1 pip = 0.01 (mnożnik 100)</li>
+                      <li>• {t.about.forexStandardPairs}</li>
+                      <li>• {t.about.forexJpyPairs}</li>
                     </ul>
                   </div>
                   <div className="bg-background/50 rounded p-4">
-                    <h4 className="font-semibold mb-2 text-foreground">Złoto (XAU)</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.goldXau}</h4>
                     <ul className="space-y-1 text-muted-foreground">
-                      <li>• XAU/USD, XAU/AUD: 1 punkt = 0.01 (mnożnik 100)</li>
-                      <li>• XAU/JPY: 1 punkt = 0.1 (mnożnik 10)</li>
+                      <li>• {t.about.goldXauUsdAud}</li>
+                      <li>• {t.about.goldXauJpy}</li>
                     </ul>
                   </div>
                   <div className="bg-background/50 rounded p-4">
-                    <h4 className="font-semibold mb-2 text-foreground">Indeksy</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.indices}</h4>
                     <ul className="space-y-1 text-muted-foreground">
-                      <li>• US30 (Dow Jones): 1 punkt = 1.0 (mnożnik 1)</li>
-                      <li>• US100 (NASDAQ): 1 punkt = 1.0 (mnożnik 1)</li>
+                      <li>• {t.about.indicesUs30}</li>
+                      <li>• {t.about.indicesUs100}</li>
                     </ul>
                   </div>
                   <div className="bg-background/50 rounded p-4">
-                    <h4 className="font-semibold mb-2 text-foreground">Automatyzacja</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.automation}</h4>
                     <p className="text-muted-foreground">
-                      System automatycznie rozpoznaje typ instrumentu i stosuje odpowiednie mnożniki, 
-                      wyświetlając wyniki w odpowiednich jednostkach (pips/pkt).
+                      {t.about.automationDesc}
                     </p>
                   </div>
                 </div>
@@ -272,55 +255,50 @@ export default function AboutPage() {
               <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg p-6 border border-cyan-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <RefreshCw className="h-5 w-5 text-cyan-400" />
-                  System Aktualizacji w Czasie Rzeczywistym
+                  {t.about.realtimeUpdateSystem}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Platforma działa 24/7, zapewniając ciągłą aktualizację danych. Wszystkie ceny i dane rynkowe są pobierane bezpośrednio 
-                  z głównych baz danych w czasie rzeczywistym, bez żadnych opóźnień. To oznacza, że sygnały handlowe są generowane na podstawie 
-                  najaktualniejszych informacji dostępnych na rynku, co zapewnia maksymalną precyzję i aktualność.
+                  {t.about.realtimeUpdateDesc}
                 </p>
                 <div className="bg-background/50 rounded-lg p-4 mb-4 border border-cyan-500/20">
-                  <p className="text-sm font-semibold text-foreground mb-2">Źródła danych w czasie rzeczywistym:</p>
+                  <p className="text-sm font-semibold text-foreground mb-2">{t.about.realtimeDataSources}</p>
                   <ul className="text-sm text-muted-foreground space-y-1">
-                    <li>• <strong>Ceny instrumentów finansowych:</strong> Bezpośrednie połączenie z głównymi bazami danych rynkowych</li>
-                    <li>• <strong>Dane ekonomiczne:</strong> Oficjalne źródła danych makroekonomicznych</li>
-                    <li>• <strong>Wolumen transakcji:</strong> Dane tick-by-tick z głównych giełd i platform handlowych</li>
-                    <li>• <strong>Brak opóźnień:</strong> Wszystkie dane są synchronizowane w czasie rzeczywistym</li>
+                    <li>• <strong>{t.about.realtimePrices}</strong> {t.about.realtimePricesDesc}</li>
+                    <li>• <strong>{t.about.realtimeEconomicData}</strong> {t.about.realtimeEconomicDataDesc}</li>
+                    <li>• <strong>{t.about.realtimeVolume}</strong> {t.about.realtimeVolumeDesc}</li>
+                    <li>• <strong>{t.about.realtimeNoDelay}</strong> {t.about.realtimeNoDelayDesc}</li>
                   </ul>
                 </div>
                 <ul className="space-y-2 text-muted-foreground">
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-cyan-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-foreground">Sygnały handlowe:</strong> Aktualizacja co 30 sekund - system sprawdza nowe sygnały 
-                      i aktualizuje status istniejących (aktywny, TP hit, SL hit)
+                      <strong className="text-foreground">{t.about.realtimeSignalsTitle}</strong> {t.about.realtimeSignalsDesc}
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-cyan-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-foreground">Kalendarz ekonomiczny:</strong> Aktualizacja co 5 minut - nowe wydarzenia i aktualizacje 
-                      wartości rzeczywistych
+                      <strong className="text-foreground">{t.about.realtimeCalendarTitle}</strong> {t.about.realtimeCalendarDesc}
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-cyan-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-foreground">Premium features:</strong> 
+                      <strong className="text-foreground">{t.about.realtimePremiumTitle}</strong> 
                       <ul className="list-disc list-inside ml-4 mt-1 space-y-1">
-                        <li>DCF Levered: Auto-refresh co 15 minut</li>
-                        <li>COT Analysis: Auto-refresh co 5 minut</li>
-                        <li>Holidays: Auto-refresh co 30 minut</li>
-                        <li>Economic Indicators: Auto-refresh co 10 minut</li>
-                        <li>Senate Trading: Auto-refresh co 30 minut</li>
+                        <li>{t.about.realtimePremiumDcf}</li>
+                        <li>{t.about.realtimePremiumCot}</li>
+                        <li>{t.about.realtimePremiumHolidays}</li>
+                        <li>{t.about.realtimePremiumIndicators}</li>
+                        <li>{t.about.realtimePremiumSenate}</li>
                       </ul>
                     </div>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle2 className="h-5 w-5 text-cyan-400 flex-shrink-0 mt-0.5" />
                     <div>
-                      <strong className="text-foreground">Powiadomienia push:</strong> Użytkownicy otrzymują natychmiastowe powiadomienia o nowych sygnałach 
-                      i ważnych wydarzeniach ekonomicznych
+                      <strong className="text-foreground">{t.about.realtimePushTitle}</strong> {t.about.realtimePushDesc}
                     </div>
                   </li>
                 </ul>
@@ -333,7 +311,7 @@ export default function AboutPage() {
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-2">
                 <Globe className="h-6 w-6 text-cyan-400" />
-                Funkcjonalności Platformy
+                {t.about.platformFeatures}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -341,14 +319,14 @@ export default function AboutPage() {
               <div className="bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg p-6 border border-cyan-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <TrendingUp className="h-5 w-5 text-cyan-400" />
-                  Sygnały Handlowe w Czasie Rzeczywistym
+                  {t.about.tradingSignalsRealtime}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Nasza platforma dostarcza profesjonalne sygnały handlowe dla szerokiej gamy instrumentów finansowych:
+                  {t.about.tradingSignalsDesc}
                 </p>
                 <div className="grid md:grid-cols-2 gap-4 mb-4">
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Pary Walutowe (Forex)</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.forexPairsTitle}</h4>
                     <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• EUR/USD, GBP/USD, USD/JPY</li>
                       <li>• AUD/USD, USD/CAD, NZD/USD</li>
@@ -357,7 +335,7 @@ export default function AboutPage() {
                     </ul>
                   </div>
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Towary i Indeksy</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.commoditiesIndices}</h4>
                     <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• Złoto: XAU/USD, XAU/JPY, XAU/AUD</li>
                       <li>• Indeksy: US30 (Dow Jones), US100 (NASDAQ)</li>
@@ -365,39 +343,39 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <div className="bg-background/50 rounded p-4">
-                  <h4 className="font-semibold mb-2 text-foreground">Każdy sygnał zawiera:</h4>
+                  <h4 className="font-semibold mb-2 text-foreground">{t.about.signalContains}</h4>
                   <ul className="grid md:grid-cols-2 gap-2 text-sm text-muted-foreground">
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
-                      Kierunek transakcji (BUY/SELL)
+                      {t.about.signalDirection}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
-                      Dokładną cenę wejścia
+                      {t.about.signalEntryPrice}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
-                      Stop Loss (SL) z obliczonym ryzykiem w pipsach/punktach
+                      {t.about.signalStopLoss}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
-                      Take Profit (TP1, TP2, TP3) z obliczonym zyskiem
+                      {t.about.signalTakeProfit}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
-                      Prawdopodobieństwo sukcesu (0-100%)
+                      {t.about.signalProbability}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
-                      Risk/Reward ratio
+                      {t.about.signalRiskReward}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
-                      Czas od utworzenia sygnału
+                      {t.about.signalTimeCreated}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-400" />
-                      Status (aktywny, TP hit, SL hit)
+                      {t.about.signalStatus}
                     </li>
                   </ul>
                 </div>
@@ -407,34 +385,34 @@ export default function AboutPage() {
               <div className="bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-lg p-6 border border-blue-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-blue-400" />
-                  Kalendarz Ekonomiczny
+                  {t.about.economicCalendar}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Kompleksowy kalendarz wydarzeń ekonomicznych z oceną wpływu na rynek:
+                  {t.about.economicCalendarDesc}
                 </p>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <h4 className="font-semibold mb-2 text-foreground">Dostępne dla wszystkich:</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.availableForAll}</h4>
                     <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>• Wydarzenia ekonomiczne z całego świata</li>
-                      <li>• Decyzje banków centralnych</li>
-                      <li>• Wskaźniki makroekonomiczne (PKB, inflacja, bezrobocie)</li>
-                      <li>• Ocena wpływu (wysoki, średni, niski)</li>
-                      <li>• Prognozy vs wartości rzeczywiste</li>
-                      <li>• Filtrowanie po kraju i wpływie</li>
+                      <li>• {t.about.economicEventsWorld}</li>
+                      <li>• {t.about.centralBankDecisions}</li>
+                      <li>• {t.about.macroIndicators}</li>
+                      <li>• {t.about.impactAssessment}</li>
+                      <li>• {t.about.forecastVsActual}</li>
+                      <li>• {t.about.filterByCountry}</li>
                     </ul>
                   </div>
                   <div>
                     <h4 className="font-semibold mb-2 text-foreground flex items-center gap-2">
                       <Crown className="h-4 w-4 text-yellow-400" />
-                      Funkcje Premium:
+                      {t.about.premiumFeatures}
                     </h4>
                     <ul className="text-sm text-muted-foreground space-y-1">
-                      <li>• <strong>Custom DCF Levered:</strong> Analiza wyceny spółek metodą DCF</li>
-                      <li>• <strong>COT Analysis:</strong> Analiza raportów Commitment of Traders</li>
-                      <li>• <strong>Holidays By Exchange:</strong> Święta giełdowe według giełdy</li>
-                      <li>• <strong>Economic Indicators:</strong> Szczegółowe wskaźniki ekonomiczne</li>
-                      <li>• <strong>Senate Trading:</strong> Dane o transakcjach senatorów USA</li>
+                      <li>• <strong>{t.about.dcfLevered}</strong> {t.about.dcfLeveredDesc}</li>
+                      <li>• <strong>{t.about.cotAnalysis}</strong> {t.about.cotAnalysisDesc}</li>
+                      <li>• <strong>{t.about.holidaysByExchange}</strong> {t.about.holidaysByExchangeDesc}</li>
+                      <li>• <strong>{t.about.economicIndicators}</strong> {t.about.economicIndicatorsDesc}</li>
+                      <li>• <strong>{t.about.senateTrading}</strong> {t.about.senateTradingDesc}</li>
                     </ul>
                   </div>
                 </div>
@@ -444,28 +422,28 @@ export default function AboutPage() {
               <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-lg p-6 border border-purple-500/20">
                 <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
                   <Smartphone className="h-5 w-5 text-purple-400" />
-                  Aplikacja Mobilna
+                  {t.about.mobileAppTitle}
                 </h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  Pełna funkcjonalność platformy dostępna na urządzeniach mobilnych:
+                  {t.about.mobileAppDesc}
                 </p>
                 <div className="grid md:grid-cols-3 gap-4">
                   <div className="bg-background/50 rounded p-4">
-                    <h4 className="font-semibold mb-2 text-foreground">Sygnały w czasie rzeczywistym</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.mobileRealtimeSignals}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Natychmiastowe powiadomienia push o nowych sygnałach i aktualizacjach
+                      {t.about.mobileRealtimeSignalsDesc}
                     </p>
                   </div>
                   <div className="bg-background/50 rounded p-4">
-                    <h4 className="font-semibold mb-2 text-foreground">Nowoczesny interfejs</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.mobileModernInterface}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Intuicyjny design zaprojektowany z myślą o traderach, wszystkie informacje na wyciągnięcie ręki
+                      {t.about.mobileModernInterfaceDesc}
                     </p>
                   </div>
                   <div className="bg-background/50 rounded p-4">
-                    <h4 className="font-semibold mb-2 text-foreground">Pełna funkcjonalność</h4>
+                    <h4 className="font-semibold mb-2 text-foreground">{t.about.mobileFullFunctionality}</h4>
                     <p className="text-sm text-muted-foreground">
-                      Wszystkie funkcje platformy webowej dostępne w aplikacji mobilnej
+                      {t.about.mobileFullFunctionalityDesc}
                     </p>
                   </div>
                 </div>

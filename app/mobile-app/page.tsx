@@ -4,6 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { useI18n } from "@/lib/i18n/context"
 import {
   Smartphone,
   Shield,
@@ -29,6 +30,7 @@ import {
 } from "lucide-react"
 
 export default function MobileAppPage() {
+  const { t } = useI18n()
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
       {/* Hero Section */}
@@ -38,7 +40,7 @@ export default function MobileAppPage() {
           <div className="max-w-4xl mx-auto text-center space-y-6">
             <Badge variant="outline" className="mb-4">
               <Smartphone className="w-3 h-3 mr-2" />
-              Wkrótce dostępna
+              {t.mobileApp.comingSoon}
             </Badge>
             <div className="relative mb-6 flex justify-center">
               <Image
@@ -53,25 +55,24 @@ export default function MobileAppPage() {
               />
             </div>
             <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-              Trading Pro Analytic
+              {t.mobileApp.appTitle}
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Algorytmiczna analiza rynku oparta na danych. Monitorowanie rynków finansowych oraz analiza sygnałów
-              tradingowych.
+              {t.mobileApp.heroDescription}
             </p>
             <div className="flex gap-4 justify-center pt-4">
               <Card className="p-4 flex items-center gap-3 hover:shadow-lg transition-shadow border-2 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                 <Download className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="font-semibold text-sm">Google Play</p>
-                  <p className="text-xs text-muted-foreground">Wkrótce</p>
+                  <p className="font-semibold text-sm">{t.mobileApp.googlePlay}</p>
+                  <p className="text-xs text-muted-foreground">{t.mobileApp.comingSoonShort}</p>
                 </div>
               </Card>
               <Card className="p-4 flex items-center gap-3 hover:shadow-lg transition-shadow border-2 border-cyan-500/30 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                 <Download className="w-5 h-5 text-primary" />
                 <div className="text-left">
-                  <p className="font-semibold text-sm">App Store</p>
-                  <p className="text-xs text-muted-foreground">Wkrótce</p>
+                  <p className="font-semibold text-sm">{t.mobileApp.appStore}</p>
+                  <p className="text-xs text-muted-foreground">{t.mobileApp.comingSoonShort}</p>
                 </div>
               </Card>
             </div>
@@ -86,13 +87,13 @@ export default function MobileAppPage() {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 border-cyan-500/50 text-cyan-400">
               <Smartphone className="w-3 h-3 mr-2" />
-              Interfejs Aplikacji
+              {t.mobileApp.appInterface}
             </Badge>
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              Zobacz aplikację w akcji
+              {t.mobileApp.seeAppInAction}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Nowoczesny interfejs zaprojektowany z myślą o traderach. Wszystkie informacje na wyciągnięcie ręki.
+              {t.mobileApp.modernInterfaceDesc}
             </p>
           </div>
 
@@ -101,13 +102,13 @@ export default function MobileAppPage() {
             {/* Stop Guessing. Start Trading */}
             <Card className="border-2 border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-all flex flex-col">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg leading-tight">STOP GUESSING. START TRADING.</CardTitle>
-                <CardDescription className="text-xs">AI-driven market logic</CardDescription>
+                <CardTitle className="text-lg leading-tight">{t.mobileApp.stopGuessing}</CardTitle>
+                <CardDescription className="text-xs">{t.mobileApp.aiDrivenLogic}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-cyan-500/10 to-blue-500/10 flex-shrink-0">
                   <Image
-                    src={encodeURI("/images/mobile-app/sty 2026, 19_43_08.png")}
+                    src="/images/mobile-app/19_03_54.png"
                     alt="STOP GUESSING. START TRADING - AI-driven market logic"
                     fill
                     className="object-contain"
@@ -119,7 +120,7 @@ export default function MobileAppPage() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
-                  Nie zgaduj - używaj sygnałów opartych na zaawansowanej analizie AI. Każdy sygnał ma precyzyjnie określone poziomy Entry, Stop Loss i Take Profit.
+                  {t.mobileApp.stopGuessingDesc}
                 </p>
               </CardContent>
             </Card>
@@ -129,9 +130,9 @@ export default function MobileAppPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg leading-tight flex items-center gap-2">
                   <Bell className="w-4 h-4 text-cyan-400 flex-shrink-0" />
-                  SECONDS MATTER
+                  {t.mobileApp.secondsMatter}
                 </CardTitle>
-                <CardDescription className="text-xs">Instant push notifications</CardDescription>
+                <CardDescription className="text-xs">{t.mobileApp.instantPush}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 flex-shrink-0">
@@ -148,7 +149,7 @@ export default function MobileAppPage() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
-                  Otrzymuj natychmiastowe powiadomienia push o nowych sygnałach. Nie przegap żadnej okazji - każda sekunda ma znaczenie na rynku.
+                  {t.mobileApp.secondsMatterDesc}
                 </p>
               </CardContent>
             </Card>
@@ -156,13 +157,13 @@ export default function MobileAppPage() {
             {/* No Chaos. Only Levels */}
             <Card className="border-2 border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-all flex flex-col">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg leading-tight">NO CHAOS. ONLY LEVELS</CardTitle>
-                <CardDescription className="text-xs">Entry, Stop Loss, Take Profits</CardDescription>
+                <CardTitle className="text-lg leading-tight">{t.mobileApp.noChaos}</CardTitle>
+                <CardDescription className="text-xs">{t.mobileApp.entryStopTake}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-green-500/10 to-emerald-500/10 flex-shrink-0">
                   <Image
-                    src={encodeURI("/images/mobile-app/, 18_08_26.png")}
+                    src="/images/mobile-app/file_000000000c90722f9f5f0cff900d9009.png"
                     alt="NO CHAOS. ONLY LEVELS - Entry, Stop Loss, Take Profits"
                     fill
                     className="object-contain"
@@ -174,7 +175,7 @@ export default function MobileAppPage() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
-                  Żadnego chaosu - tylko jasno określone poziomy. Każdy sygnał zawiera Entry Price, Stop Loss i trzy poziomy Take Profit.
+                  {t.mobileApp.noChaosDesc}
                 </p>
               </CardContent>
             </Card>
@@ -182,8 +183,8 @@ export default function MobileAppPage() {
             {/* Probability Over Emotion */}
             <Card className="border-2 border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-all flex flex-col">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg leading-tight">PROBABILITY OVER EMOTION</CardTitle>
-                <CardDescription className="text-xs">Signals ranked by win probability</CardDescription>
+                <CardTitle className="text-lg leading-tight">{t.mobileApp.probabilityEmotion}</CardTitle>
+                <CardDescription className="text-xs">{t.mobileApp.rankedByProbability}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex-shrink-0">
@@ -200,7 +201,7 @@ export default function MobileAppPage() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
-                  Sygnały są klasyfikowane według prawdopodobieństwa sukcesu. Podejmuj decyzje oparte na danych, nie na emocjach.
+                  {t.mobileApp.probabilityDesc}
                 </p>
               </CardContent>
             </Card>
@@ -208,8 +209,8 @@ export default function MobileAppPage() {
             {/* Real Trades. Real Results */}
             <Card className="border-2 border-cyan-500/30 shadow-[0_0_20px_rgba(6,182,212,0.3)] hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-all flex flex-col">
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg leading-tight">REAL TRADES. REAL RESULTS.</CardTitle>
-                <CardDescription className="text-xs">Track hits, losses & win rates</CardDescription>
+                <CardTitle className="text-lg leading-tight">{t.mobileApp.realTrades}</CardTitle>
+                <CardDescription className="text-xs">{t.mobileApp.trackHitsLosses}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 flex-shrink-0">
@@ -226,7 +227,7 @@ export default function MobileAppPage() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
-                  Śledź rzeczywiste wyniki swoich transakcji. Statystyki pokazują trafienia TP, straty SL i rzeczywisty win rate.
+                  {t.mobileApp.realTradesDesc}
                 </p>
               </CardContent>
             </Card>
@@ -236,14 +237,14 @@ export default function MobileAppPage() {
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg leading-tight flex items-center gap-2">
                   <Eye className="w-4 h-4 text-yellow-400 flex-shrink-0" />
-                  SEE WHAT OTHERS CAN'T
+                  {t.mobileApp.seeWhatOthers}
                 </CardTitle>
-                <CardDescription className="text-xs">Unlock premium signal details</CardDescription>
+                <CardDescription className="text-xs">{t.mobileApp.unlockPremium}</CardDescription>
               </CardHeader>
               <CardContent className="flex-1 flex flex-col">
                 <div className="relative aspect-[4/5] rounded-lg overflow-hidden mb-3 border-2 border-yellow-500/30 bg-gradient-to-br from-yellow-500/20 to-amber-500/20 flex-shrink-0">
                   <Image
-                    src={encodeURI("/images/mobile-app/, 18_08_26.png")}
+                    src="/images/mobile-app/18_08_26.png"
                     alt="SEE WHAT OTHERS CAN'T - Unlock premium signal details"
                     fill
                     className="object-contain"
@@ -255,7 +256,7 @@ export default function MobileAppPage() {
                   />
                 </div>
                 <p className="text-xs text-muted-foreground leading-relaxed flex-grow">
-                  Użytkownicy Premium mają dostęp do zaawansowanych szczegółów sygnałów i dodatkowych funkcji analitycznych.
+                  {t.mobileApp.seeWhatOthersDesc}
                 </p>
               </CardContent>
             </Card>
@@ -270,14 +271,13 @@ export default function MobileAppPage() {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 border-cyan-500/50 text-cyan-400">
               <Zap className="w-3 h-3 mr-2" />
-              Sztuczna Inteligencja
+              {t.mobileApp.artificialIntelligence}
             </Badge>
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
-              Sygnały generowane przez AI uczącą się w czasie rzeczywistego
+              {t.mobileApp.aiGeneratedSignals}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Zaawansowany system uczenia maszynowego analizuje tysiące wzorców rynkowych i automatycznie dostosowuje
-              swoje modele predykcyjne na podstawie rzeczywistych wyników
+              {t.mobileApp.aiSystemDesc}
             </p>
           </div>
 
@@ -289,8 +289,8 @@ export default function MobileAppPage() {
                   <Layers className="w-6 h-6 text-cyan-400" />
                 </div>
                 <div>
-                  <CardTitle className="text-2xl text-cyan-400">Architektura systemu AI</CardTitle>
-                  <CardDescription>Wielowarstwowy model uczenia głębokiego z mechanizmem adaptacji</CardDescription>
+                  <CardTitle className="text-2xl text-cyan-400">{t.mobileApp.aiArchitecture}</CardTitle>
+                  <CardDescription>{t.mobileApp.multiLayerModel}</CardDescription>
                 </div>
               </div>
             </CardHeader>
@@ -300,11 +300,11 @@ export default function MobileAppPage() {
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Activity className="w-5 h-5 text-cyan-400" />
-                      Warstwa analizy technicznej
+                      {t.mobileApp.technicalAnalysis}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
-                    <p className="text-muted-foreground">• Analiza 50+ wskaźników technicznych jednocześnie</p>
+                    <p className="text-muted-foreground">{t.mobileApp.technicalAnalysisDesc}</p>
                     <p className="text-muted-foreground">• Identyfikacja formacji wykresów i wzorców świecowych</p>
                     <p className="text-muted-foreground">• Detekcja poziomów wsparcia i oporu z historii</p>
                     <p className="text-muted-foreground">• Ocena siły trendu na 5 interwałach czasowych</p>
@@ -315,12 +315,11 @@ export default function MobileAppPage() {
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <TrendingUp className="w-5 h-5 text-cyan-400" />
-                      Analiza sentiment rynkowego
+                      {t.mobileApp.marketSentiment}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
-                    <p className="text-muted-foreground">• Monitorowanie wolumenu i płynności rynku</p>
-                    <p className="text-muted-foreground">• Analiza zachowania ceny w kluczowych strefach</p>
+                    <p className="text-muted-foreground">{t.mobileApp.marketSentimentDesc}</p>
                     <p className="text-muted-foreground">• Detekcja anomalii i nietypowych ruchów</p>
                     <p className="text-muted-foreground">• Korelacja międzyrynkowa (forex, indeksy, surowce)</p>
                   </CardContent>
@@ -330,12 +329,11 @@ export default function MobileAppPage() {
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Zap className="w-5 h-5 text-cyan-400" />
-                      Model predykcyjny
+                      {t.mobileApp.volatilityAnalysis}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
-                    <p className="text-muted-foreground">• Sieci neuronowe LSTM dla sekwencji czasowych</p>
-                    <p className="text-muted-foreground">• Ensemble learning - połączenie wielu modeli</p>
+                    <p className="text-muted-foreground">{t.mobileApp.volatilityAnalysisDesc}</p>
                     <p className="text-muted-foreground">• Gradient boosting dla optymalizacji decyzji</p>
                     <p className="text-muted-foreground">• Monte Carlo simulation dla szacowania ryzyka</p>
                   </CardContent>
@@ -345,11 +343,11 @@ export default function MobileAppPage() {
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Target className="w-5 h-5 text-cyan-400" />
-                      Kalibracja poziomów
+                      {t.mobileApp.fundamentalAnalysis}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
-                    <p className="text-muted-foreground">• Dynamiczne obliczanie Entry na podstawie ATR</p>
+                    <p className="text-muted-foreground">{t.mobileApp.fundamentalAnalysisDesc}</p>
                     <p className="text-muted-foreground">• Stop Loss uwzględniający zmienność rynku</p>
                     <p className="text-muted-foreground">• 3 poziomy TP oparte na Fibonacci i strukturze</p>
                     <p className="text-muted-foreground">• Optymalizacja risk-reward ratio (cel min. 1:2)</p>
@@ -469,14 +467,13 @@ export default function MobileAppPage() {
           <div className="text-center mb-12">
             <Badge variant="outline" className="mb-4 border-yellow-500/50 text-yellow-400">
               <Clock className="w-3 h-3 mr-2" />
-              Kalendarz Ekonomiczny
+              {t.mobileApp.economicCalendar}
             </Badge>
             <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent">
-              Profesjonalny Kalendarz Wydarzeń Gospodarczych
+              {t.mobileApp.economicCalendarTitle}
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Monitoruj najważniejsze wydarzenia ekonomiczne wpływające na rynki finansowe. System automatycznie
-              filtruje najważniejsze ogłoszenia i ostrzega przed zwiększoną zmiennością.
+              {t.mobileApp.economicCalendarDesc}
             </p>
           </div>
 
@@ -498,7 +495,7 @@ export default function MobileAppPage() {
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <AlertCircle className="w-5 h-5 text-yellow-400" />
-                      Wydarzenia wysokiego wpływu
+                      {t.mobileApp.highImpactEvents}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2 text-sm">
@@ -539,33 +536,30 @@ export default function MobileAppPage() {
                     <div className="p-4 rounded-lg bg-background/50 border border-cyan-500/20">
                       <h4 className="font-semibold text-cyan-400 mb-2 flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4" />
-                        Powiadomienia push
+                        {t.mobileApp.pushNotifications}
                       </h4>
                       <p className="text-sm text-muted-foreground">
-                        Otrzymuj alerty 30 minut przed ważnymi ogłoszeniami. System automatycznie ostrzega o
-                        zbliżających się wydarzeniach wpływających na Twoje otwarte pozycje.
+                        {t.mobileApp.pushNotificationsDesc}
                       </p>
                     </div>
 
                     <div className="p-4 rounded-lg bg-background/50 border border-cyan-500/20">
                       <h4 className="font-semibold text-cyan-400 mb-2 flex items-center gap-2">
                         <Filter className="w-4 h-4" />
-                        Inteligentne filtrowanie
+                        {t.mobileApp.customFilters}
                       </h4>
                       <p className="text-sm text-muted-foreground">
-                        Wybierz, które waluty i kategorie wydarzeń Cię interesują. Aplikacja ukryje nieistotne
-                        ogłoszenia i pokaże tylko te wpływające na Twój portfel.
+                        {t.mobileApp.customFiltersDesc}
                       </p>
                     </div>
 
                     <div className="p-4 rounded-lg bg-background/50 border border-cyan-500/20">
                       <h4 className="font-semibold text-cyan-400 mb-2 flex items-center gap-2">
                         <BarChart3 className="w-4 h-4" />
-                        Analiza historyczna
+                        {t.mobileApp.historicalAnalysis}
                       </h4>
                       <p className="text-sm text-muted-foreground">
-                        Przeglądaj, jak rynek zareagował na podobne wydarzenia w przeszłości. System pokazuje średnią
-                        zmienność i kierunek ruchu po konkretnych ogłoszeniach.
+                        {t.mobileApp.historicalAnalysisDesc}
                       </p>
                     </div>
 
@@ -584,20 +578,11 @@ export default function MobileAppPage() {
                   <div className="mt-4 p-4 rounded-lg bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-2 border-cyan-500/40">
                     <h4 className="font-semibold text-cyan-400 mb-3 flex items-center gap-2">
                       <Target className="w-5 h-5" />
-                      Kalendarz zintegrowany z sygnałami AI
+                      {t.mobileApp.calendarIntegration}
                     </h4>
                     <div className="space-y-2 text-sm text-muted-foreground">
                       <p>
-                        ✓ <span className="font-semibold text-foreground">Automatyczna ocena:</span> AI uwzględnia
-                        zbliżające się wydarzenia przy generowaniu sygnałów
-                      </p>
-                      <p>
-                        ✓ <span className="font-semibold text-foreground">Regulacja poziomu ryzyka:</span> Przed
-                        istotnymi ogłoszeniami system rekomenduje mniejsze pozycje
-                      </p>
-                      <p>
-                        ✓ <span className="font-semibold text-foreground">Tymczasowe wstrzymanie:</span> W czasie
-                        publikacji NFP, Fed Decision lub CPI aplikacja nie publikuje nowych sygnałów
+                        {t.mobileApp.calendarIntegrationDesc}
                       </p>
                       <p>
                         ✓ <span className="font-semibold text-foreground">Post-news trading:</span> Po ogłoszeniu AI
@@ -723,9 +708,9 @@ export default function MobileAppPage() {
               <div className="w-12 h-12 rounded-lg bg-cyan-500/10 flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 transition-colors shadow-[0_0_10px_rgba(6,182,212,0.4)]">
                 <BarChart3 className="w-6 h-6 text-cyan-400" />
               </div>
-              <CardTitle className="text-cyan-400">Statystyki rzeczywiste</CardTitle>
+              <CardTitle className="text-cyan-400">{t.mobileApp.realStatistics}</CardTitle>
               <CardDescription>
-                Statystyka oparta na rzeczywistych zdarzeniach rynkowych, nie symulacjach
+                {t.mobileApp.realStatisticsDesc}
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -777,29 +762,29 @@ export default function MobileAppPage() {
             <CardHeader>
               <div className="flex items-center gap-3">
                 <AlertCircle className="w-6 h-6 text-primary" />
-                <CardTitle>Ważne informacje</CardTitle>
+                <CardTitle>{t.mobileApp.importantDisclaimer}</CardTitle>
               </div>
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-muted-foreground mt-0.5" />
                 <p className="text-muted-foreground">
-                  Aplikacja nie oferuje porad inwestycyjnych ani doradztwa finansowego
+                  {t.mobileApp.disclaimer1}
                 </p>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-muted-foreground mt-0.5" />
-                <p className="text-muted-foreground">Aplikacja nie gwarantuje wyników finansowych ani zysków</p>
+                <p className="text-muted-foreground">{t.mobileApp.disclaimer2}</p>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-muted-foreground mt-0.5" />
                 <p className="text-muted-foreground">
-                  Wszystkie decyzje inwestycyjne użytkownik podejmuje samodzielnie
+                  {t.mobileApp.disclaimer4}
                 </p>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-muted-foreground mt-0.5" />
-                <p className="text-muted-foreground">Aplikacja ma charakter informacyjno-analityczny</p>
+                <p className="text-muted-foreground">{t.mobileApp.disclaimer5}</p>
               </div>
             </CardContent>
           </Card>

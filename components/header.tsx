@@ -49,7 +49,7 @@ export function Header() {
     <header className="w-full border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
       <div className="container flex h-16 items-center">
         <Link href="/" className="mr-6 flex items-center">
-          <Logo size="sm" />
+          <Logo size="md" />
         </Link>
 
         <div className="flex flex-1 items-center justify-end space-x-4">

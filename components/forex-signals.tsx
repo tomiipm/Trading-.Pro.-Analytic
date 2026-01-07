@@ -398,6 +398,7 @@ export function ForexSignals() {
 }
 
 function SignalCard({ signal, onClick, hasAccess = true }: { signal: ForexSignal; onClick: () => void; hasAccess?: boolean }) {
+  const { t } = useI18n()
   const isBuy = signal.signal_type?.toLowerCase() === "buy"
 
   const formatProbability = (prob: number | string): number => {
@@ -685,9 +686,9 @@ function SignalCard({ signal, onClick, hasAccess = true }: { signal: ForexSignal
         {!hasAccess && (
         <div className="mt-4 pt-3 border-t border-border/30 text-center">
           <Link href="/subscriptions">
-            <Button size="sm" variant="outline" className="w-full">
-              <Lock className="h-4 w-4 mr-2" />
-              Aktywuj subskrypcję, aby zobaczyć szczegóły
+            <Button size="sm" variant="outline" className="w-full whitespace-normal break-words text-xs leading-tight h-auto py-2">
+              <Lock className="h-4 w-4 mr-2 flex-shrink-0" />
+              {t.signals.activateSubscription}
             </Button>
           </Link>
         </div>
@@ -819,7 +820,7 @@ function SignalDetailsDialog({ signal, onClose }: { signal: ForexSignal | null; 
               <Link href="/subscriptions">
                 <Button variant="outline" className="w-full">
                   <Lock className="h-4 w-4 mr-2" />
-                  Aktywuj subskrypcję
+                  {t('subscriptions.activate')}
                 </Button>
               </Link>
             </div>
@@ -910,13 +911,12 @@ function SignalDetailsDialog({ signal, onClose }: { signal: ForexSignal | null; 
           <div className="p-6 rounded-lg border-2 border-yellow-500/50 bg-yellow-500/10 text-center space-y-4">
             <Lock className="h-8 w-8 text-yellow-500 mx-auto" />
             <div>
-              <h4 className="font-semibold text-lg mb-2">Pełne szczegóły dostępne tylko dla subskrybentów</h4>
+              <h4 className="font-semibold text-lg mb-2">{t('signals.premiumDetailsTitle')}</h4>
               <p className="text-sm text-muted-foreground mb-4">
-                Aktywuj subskrypcję, aby zobaczyć Entry Price, Risk/Reward, Probability i inne szczegóły.
+                {t('signals.premiumDetailsDescription')}
               </p>
               <Link href="/subscriptions">
-                <Button className="w-full">
-                  Przejdź do subskrypcji
+                <Button className="w-full">                  {t('signals.goToSubscriptions')}
                 </Button>
               </Link>
             </div>

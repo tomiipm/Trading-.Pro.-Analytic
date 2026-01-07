@@ -34,21 +34,22 @@ function ResetPasswordContent() {
   }
 
   useEffect(() => {
-    // Check if user is authenticated (Supabase callback should have set the session)
-    // We check this by calling an API endpoint that checks auth status
+    // Always show the form initially - let the API handle auth validation
+    // This prevents the "no token" error when user comes from email link
+    setHasToken(true)
+    
+    // Optional: Check auth status in background for better UX
     const checkAuth = async () => {
       try {
         const response = await fetch("/api/auth/check-reset-token", {
           method: "GET",
           credentials: "include",
         })
-        if (response.ok) {
-          setHasToken(true)
-        } else {
-          setHasToken(false)
+        if (!response.ok) {
+          console.warn("Auth check failed, but allowing form submission")
         }
       } catch (error) {
-        setHasToken(false)
+        console.warn("Auth check error, but allowing form submission", error)
       }
     }
     checkAuth()

@@ -75,11 +75,7 @@ export async function POST(request: Request) {
       // Provide user-friendly error messages based on Supabase error codes
       let errorMessage = "Invalid email or password. Please try again."
       
-      if (error.message.includes("Email not confirmed") || 
-          error.message.includes("email_not_confirmed") ||
-          error.status === 401) {
-        errorMessage = "Please check your email and confirm your account before logging in."
-      } else if (error.message.includes("Invalid login credentials") || 
+      if (error.message.includes("Invalid login credentials") || 
                  error.message.includes("invalid_credentials") ||
                  error.message.includes("Invalid")) {
         errorMessage = "Invalid email or password. Please check your credentials and try again."
@@ -97,14 +93,8 @@ export async function POST(request: Request) {
       )
     }
     
-    // Check if email is confirmed (Supabase may return user even if not confirmed)
-    if (data.user && !data.user.email_confirmed_at) {
-      logger.warn("Login attempted with unconfirmed email", { email: data.user.email, userId: data.user.id })
-      return NextResponse.json(
-        { error: "Please check your email and confirm your account before logging in." },
-        { status: 401 }
-      )
-    }
+    // Email confirmation is disabled in Supabase settings
+    // Users can login immediately after signup
 
     // Verify session exists
     if (!data.session) {

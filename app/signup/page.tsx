@@ -65,34 +65,19 @@ export default function SignupPage() {
         }),
       })
 
-      const data = await response.json()
+    const data = await response.json()
 
-      if (!response.ok) {
-        let errorMessage = t.signupPage.error || "Signup failed. Please try again."
-        try {
-          const data = await response.json()
-          errorMessage = data.error || errorMessage
-        } catch (parseError) {
-          // If response is not JSON, use status text or default message
-          if (response.status === 400) {
-            errorMessage = t.signupPage.invalidData || "Invalid data. Please check your input."
-          } else if (response.status === 429) {
-            errorMessage = t.signupPage.tooManyAttempts || "Too many signup attempts. Please try again later."
-          } else {
-            errorMessage = response.statusText || errorMessage
-          }
-        }
-        setError(errorMessage)
-        toast.error(errorMessage)
-        // Reset reCAPTCHA on error
-        if (recaptchaRef.current) {
-          recaptchaRef.current.reset()
-        }
-        setRecaptchaToken(null)
-        return
+    if (!response.ok) {
+      const errorMessage = data.error || t.signupPage.error || "Signup failed. Please try again."
+      setError(errorMessage)
+      toast.error(errorMessage)
+      // Reset reCAPTCHA on error
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset()
       }
-
-      const data = await response.json()
+      setRecaptchaToken(null)
+      return
+    }
       
       // Verify we got a valid response
       if (!data.success && !data.user) {
